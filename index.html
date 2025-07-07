@@ -25,14 +25,14 @@
             background-color: #f8fafc; /* slate-50 */
             color: #334155; /* slate-700 */
         }
-      .nav-link {
+     .nav-link {
             transition: all 0.2s ease-in-out;
         }
-      .nav-link.active {
+     .nav-link.active {
             color: #0369a1; /* sky-700 */
             border-bottom-color: #0369a1;
         }
-      .chart-container {
+     .chart-container {
             position: relative;
             width: 100%;
             margin-left: auto;
@@ -41,11 +41,11 @@
             height: 300px;
         }
         @media (min-width: 768px) {
-          .chart-container {
+         .chart-container {
                 height: 400px;
             }
         }
-      .tab-button.active {
+     .tab-button.active {
             background-color: #1e293b; /* slate-800 */
             color: #ffffff;
         }
@@ -81,29 +81,29 @@
 
         <section id="dashboard" class="scroll-mt-24 space-y-8">
             <div class="text-center">
-                <p class="text-base font-semibold text-sky-600">Bi-Weekly Intelligence Briefing: June 30, 2025</p>
-                <h2 class="mt-2 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Consolidation and Compliance Drive the Market</h2>
-                <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">This intelligence briefing for the last two weeks highlights a market defined by significant strategic consolidation and an evolving, complex regulatory landscape. Major players like Veolia and WM are making substantial investments in infrastructure and projecting strong growth, while M&A activity in specialized sectors like organics is accelerating. Concurrently, the push for EPR continues to create both opportunities and friction, with legislative progress in some areas and setbacks in others, underscoring the critical need for adaptable compliance software.</p>
+                <p class="text-base font-semibold text-sky-600">Weekly Intelligence Briefing: July 7, 2025</p>
+                <h2 class="mt-2 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Strategic Positioning and Niche Dominance</h2>
+                <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">This week's intelligence reveals a market increasingly defined by strategic execution rather than blockbuster announcements. Competitor Sensoneo is showcasing significant traction in both large-scale IoT deployments and complex compliance software, establishing itself as a formidable dual threat. Meanwhile, the regulatory landscape continues to mature, with detailed UK EPR rules highlighting the growing need for sophisticated data management. Concurrently, new EU funding calls signal a strong, continued push for innovation in AI and circular economy technologies.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
-                    <h3 class="font-bold text-slate-800">1. Enterprise Players Double Down</h3>
-                    <p class="mt-2 text-sm text-slate-600">WM projects revenues of up to $29B by 2027, driven by recycling and RNG. Veolia is also making major investments in hazardous waste and PFAS treatment, signaling strong confidence and a focus on high-margin, compliance-driven services.</p>
+                    <h3 class="font-bold text-slate-800">1. Sensoneo's Two-Front Advance</h3>
+                    <p class="mt-2 text-sm text-slate-600">Sensoneo is successfully executing a dual strategy: winning massive smart city sensor contracts (e.g., Madrid) while also becoming the de facto software provider for complex national Deposit Return Schemes (DRS) in the EU.</p>
                 </div>
                 <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
-                    <h3 class="font-bold text-slate-800">2. M&A Heats Up in Specialized Verticals</h3>
-                    <p class="mt-2 text-sm text-slate-600">The acquisition of AIM Group by Convertus creates Canada's largest organic waste processor. Simultaneously, Circular Services is expanding its MRF operations in the US. This consolidation points to a maturing market where scale and specialized expertise are becoming key differentiators.</p>
+                    <h3 class="font-bold text-slate-800">2. EPR Compliance Gets Granular</h3>
+                    <p class="mt-2 text-sm text-slate-600">New guidance on the UK's EPR for packaging rules reveals the deep level of data required from producers, including packaging activity, type, class, and material weight. This complexity makes manual tracking untenable and creates an urgent need for specialized software.</p>
                 </div>
                 <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
-                    <h3 class="font-bold text-slate-800">3. The Uneven Path of EPR</h3>
-                    <p class="mt-2 text-sm text-slate-600">The regulatory landscape remains fragmented. While Maine has updated its packaging EPR law and other states are advancing battery stewardship bills, New York's broader packaging EPR bill failed to pass. This highlights the ongoing legislative battles and the need for highly flexible compliance software.</p>
+                    <h3 class="font-bold text-slate-800">3. EU Funds Next-Gen Circular Tech</h3>
+                    <p class="mt-2 text-sm text-slate-600">A new slate of EU "Cascade Funding" opportunities is targeting startups and SMEs. Key calls focus on AI in manufacturing and developing circular economy solutions for challenging materials like reinforced polymers, signaling where the next wave of innovation is being directed.</p>
                 </div>
             </div>
             
             <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
-                <h3 class="text-lg font-semibold text-slate-800 text-center mb-4">Recent Startup Funding Highlights</h3>
-                <p class="text-center text-sm text-slate-500 mb-4">This chart visualizes key venture funding rounds announced over the last two weeks, indicating where investment is flowing in the innovator ecosystem. The landscape shows a mix of SaaS, advanced recycling, and large-scale "waste-as-a-resource" infrastructure plays.</p>
+                <h3 class="text-lg font-semibold text-slate-800 text-center mb-4">Recent Startup Funding Context</h3>
+                <p class="text-center text-sm text-slate-500 mb-4">While no major funding rounds were announced this week, this chart of recent investments provides context on where capital has been flowing. The landscape shows a mix of SaaS, advanced recycling, and large-scale "waste-as-a-resource" infrastructure plays.</p>
                 <div class="chart-container">
                     <canvas id="fundingChart"></canvas>
                 </div>
@@ -127,7 +127,7 @@
         <section id="market-drivers" class="scroll-mt-24 pt-16 space-y-8">
             <div class="text-center">
                 <h2 class="text-3xl font-bold tracking-tight text-slate-900">Market Drivers</h2>
-                <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">The market is being propelled by two powerful, interlocking forces: stringent new regulations that create compliance-driven demand, and significant capital inflows that are creating entirely new business models and customer types.</p>
+                <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">The market continues to be shaped by the increasing complexity of environmental regulations and the flow of capital towards proven, scalable solutions. This week, the focus is on the detailed requirements of new EPR schemes, which are creating a clear, compliance-driven need for advanced software.</p>
             </div>
 
             <div class="bg-white rounded-lg shadow-sm border border-slate-200">
@@ -139,29 +139,27 @@
                 </div>
                 <div class="p-6 md:p-8">
                     <div id="regulation-content" class="market-content-pane">
-                        <h3 class="text-xl font-bold text-slate-800 mb-4">The Uneven but Unmistakable Push for Producer Responsibility</h3>
+                        <h3 class="text-xl font-bold text-slate-800 mb-4">UK EPR Rules Highlight the Data Management Challenge</h3>
                         <div class="space-y-6">
                             <div>
-                                <h4 class="font-semibold text-sky-700">EPR Landscape Shows Mixed Progress</h4>
-                                <p class="mt-2 text-slate-600">The past two weeks have shown both the momentum and the friction in EPR legislation. In a positive step for harmonization, Maine updated its first-in-the-nation packaging EPR law to better align with models from other states. Concurrently, New York and Connecticut are advancing bills for e-mobility battery stewardship, showing progress in specific, high-risk categories. However, the failure of New York's broader Packaging Reduction and Recycling Infrastructure Act to get a vote highlights the significant industry and political hurdles that remain. This fragmented progress underscores the market need for highly adaptable compliance software.</p>
+                                <h4 class="font-semibold text-sky-700">From Policy to Practicality: The Data Burden</h4>
+                                <p class="mt-2 text-slate-600">New guidance from the UK government on Extended Producer Responsibility (EPR) for packaging lays bare the immense data management challenge facing producers. The rules require organizations to collect and report highly granular data, including not just material and weight, but also packaging activity (e.g., importing, branding), packaging type (household vs. non-household), and packaging class (primary, secondary, tertiary).</p>
                             </div>
                              <div>
-                                <h4 class="font-semibold text-sky-700">US Biogas Sector Faces Headwinds from RFS Update</h4>
-                                <p class="mt-2 text-slate-600">Biogas industry groups expressed disappointment with the EPA's proposed updates to the Renewable Fuel Standard (RFS), which lowered volume expectations for cellulosic biofuels from sources like anaerobic digesters. This policy uncertainty could temper investment in new organics-to-energy facilities, a key growth vertical for waste-tech software providers.</p>
+                                <h4 class="font-semibold text-sky-700">Compliance Creates a Software Imperative</h4>
+                                <p class="mt-2 text-slate-600">This level of detail makes manual tracking via spreadsheets virtually impossible and highly prone to error. As these regulations come into full force in 2025 (based on 2024 data), affected companies will have a clear and urgent need for a robust software solution to manage data collection, aggregation, and reporting to avoid significant financial penalties. This shifts the software purchasing decision from an operational efficiency choice to a core compliance necessity.</p>
                             </div>
                         </div>
                     </div>
                     <div id="capital-content" class="market-content-pane hidden">
-                         <h3 class="text-xl font-bold text-slate-800 mb-4">Major Capital Inflows Signal Confidence and Consolidation</h3>
+                         <h3 class="text-xl font-bold text-slate-800 mb-4">M&A Context: Big Players Signal Confidence</h3>
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                             <div>
-                                <h4 class="font-semibold text-sky-700">Enterprise Players Make Billion-Dollar Bets</h4>
-                                <p class="mt-2 text-slate-600">The industry's largest players are signaling strong confidence. WM announced projections of up to $29 billion in revenue by 2027, driven heavily by investments in its recycling and renewable natural gas (RNG) infrastructure. Similarly, Veolia is making major investments in its hazardous waste treatment capacity and expanding its US presence to meet growing demand for PFAS remediation, targeting 50% growth in the US market.</p>
-                                <h4 class="font-semibold text-sky-700 mt-6">Consolidation Accelerates in Specialized Sectors</h4>
-                                <p class="mt-2 text-slate-600">The trend of market consolidation is clear, especially in high-growth verticals. Convertus Group's acquisition of AIM Group has created the largest organic waste processor in Canada, demonstrating the move toward scaled, specialized operators. In the US, Circular Services (a Closed Loop company) is expanding its operational footprint by taking over two county-run MRFs in North Carolina, further cementing its role as a key national player in recycling infrastructure.</p>
+                                <h4 class="font-semibold text-sky-700">Major Haulers Pursue Billion-Dollar M&A Strategies</h4>
+                                <p class="mt-2 text-slate-600">While no major deals were announced this week, recent Q1 2025 data from Waste Dive provides crucial context. The top 5 publicly traded waste companies spent nearly $1.5 billion on M&A in the first quarter alone. Both WM and Republic Services have indicated they are on track for another "outsized year" of acquisitions, with pipelines full of tuck-in opportunities. This demonstrates a strong appetite for growth and consolidation among the industry's largest players.</p>
                             </div>
                              <div>
-                                <p class="text-center text-sm text-slate-500 mb-4">This chart highlights the different scales and types of investment. Venture capital is funding SaaS growth, while major asset managers are funding large-scale infrastructure based on waste-as-a-resource models.</p>
+                                <p class="text-center text-sm text-slate-500 mb-4">This chart shows the reported M&A spending by the top 5 public waste companies in Q1 2025, illustrating the scale of investment in market consolidation.</p>
                                 <div class="chart-container h-64 md:h-80">
                                     <canvas id="capitalChart"></canvas>
                                 </div>
@@ -175,39 +173,23 @@
         <section id="innovation" class="scroll-mt-24 pt-16 space-y-8">
             <div class="text-center">
                 <h2 class="text-3xl font-bold tracking-tight text-slate-900">Innovation Watch</h2>
-                <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">This section tracks the next wave of industry innovation, from venture-backed startups to patent trends and academic research, providing a view into future threats and opportunities.</p>
+                <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">This section tracks the next wave of industry innovation. This week, the focus is on new EU funding programs designed to foster the next generation of circular economy and AI-driven manufacturing startups, along with academic research validating key technology trends.</p>
             </div>
             
             <div class="bg-white rounded-lg shadow-sm border border-slate-200">
                 <div class="p-6 md:p-8 space-y-8">
-                    <div class="border-b border-slate-200 pb-8">
-                        <h3 class="text-xl font-bold text-slate-800 mb-4 text-center">Patenting Trends: A Long-Term View</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
-                            <div class="md:col-span-1 text-center">
-                                <p class="text-6xl font-bold text-sky-600">18x</p>
-                                <p class="mt-2 font-semibold text-slate-700">Increase in patenting activity for plastic waste management from 1990-2023.</p>
-                            </div>
-                            <div class="md:col-span-2">
-                                <p class="text-slate-600 mb-4">Long-term data from the EPO confirms a massive surge in innovation, with a sharp focus on AI-driven sorting. This signifies a fundamental shift to a high-tech, IP-driven industry. The future leaders will be defined by their ownership of core IP. An active IP strategy is essential for both protection and intelligence gathering.</p>
-                                <div class="chart-container h-56 md:h-64">
-                                    <canvas id="patentChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="pt-8">
-                        <h3 class="text-xl font-bold text-slate-800 mb-4 text-center">Emerging Innovators: The Amazon Accelerator</h3>
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-800 mb-4 text-center">EU Funding Calls Signal Key Innovation Areas</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                             <div class="md:col-span-1">
-                                <p class="text-slate-600">The most significant news for the startup ecosystem is the launch of the Amazon Sustainability Accelerator 2025. The program is specifically seeking early-stage companies with scalable solutions in the "Circular Economy / Waste Management" vertical. Key areas of interest include innovations that use AI to improve waste segregation, enable real-time waste tracking, and support material recovery in closed-loop systems. Selected startups receive mentorship, AWS credits, and the chance to pilot their technology with Amazon, with potential funding from $50,000 to $2 million.</p>
+                                <p class="text-slate-600">On July 1st, a new slate of 15 "Cascade Funding" opportunities was announced for European SMEs and startups. These programs provide equity-free funding and support to develop and test new technologies. Several calls are directly relevant to the waste-tech sector, indicating where European innovation policy is focused.</p>
                             </div>
                             <div class="md:col-span-1 bg-slate-50 p-6 rounded-lg border">
-                                <h4 class="font-semibold text-sky-700">Key Details for Startups</h4>
+                                <h4 class="font-semibold text-sky-700">Relevant Funding Opportunities</h4>
                                 <ul class="list-disc pl-5 mt-2 space-y-2 text-slate-600 text-sm">
-                                    <li><strong>Focus:</strong> AI for waste segregation, real-time tracking, closed-loop systems.</li>
-                                    <li><strong>Benefits:</strong> Pilot opportunity ($50k-$2M), cash grant, AWS credits, mentorship.</li>
-                                    <li><strong>Eligibility:</strong> EEA, UK, or Swiss registration; post-prototype stage (TRL 6+).</li>
-                                    <li><strong>Timeline:</strong> Applications reviewed June-July; program runs Sept-Oct 2025.</li>
+                                    <li><strong>YouRban Open Call:</strong> Focuses on recycling and upcycling reinforced polymers in urban environments, targeting a difficult waste stream.</li>
+                                    <li><strong>AIRISE.EU Open Call:</strong> Supports the development and deployment of AI applications to enhance sustainability and agility in European manufacturing.</li>
+                                    <li><strong>Q2Scale Programme:</strong> An accelerator designed to help startups in sustainability and supply chain sectors expand internationally.</li>
                                 </ul>
                             </div>
                         </div>
@@ -216,12 +198,12 @@
                          <h3 class="text-xl font-bold text-slate-800 mb-4 text-center">Future Tech & Research Breakthroughs</h3>
                          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="bg-slate-50 p-6 rounded-lg border">
-                                <h4 class="font-semibold text-sky-700">Recycling for Green Tech & Niche Organics</h4>
-                                <p class="mt-2 text-slate-600">Recent academic research published in the journal *Recycling* points to the next frontier of waste management. One study details a complete recycling chain for PEM water electrolyzers, a key component in the hydrogen economy. Another explores the creation of valuable compost from invasive plant species. This research highlights a growing need for software capable of managing complex, multi-stage recycling processes for novel and hazardous materials.</p>
+                                <h4 class="font-semibold text-sky-700">Academic Validation for AI & Blockchain</h4>
+                                <p class="mt-2 text-slate-600">A recent academic review of smart waste management solutions reinforces the value of core technologies in the sector. The paper explicitly endorses AI-driven waste sorting and blockchain-based waste tracking as key strategies to improve waste valorization. This provides strong, third-party validation for the technologies that advanced SaaS platforms are built upon.</p>
                             </div>
                             <div class="bg-slate-50 p-6 rounded-lg border">
-                                <h4 class="font-semibold text-sky-700">Data and AI Drive Sustainability Innovation</h4>
-                                <p class="mt-2 text-slate-600">The European Patent Office (EPO) announced the finalists for its CodeFest 2025, a competition challenging entrants to create automated systems using patent data to accelerate sustainability. This event underscores the increasing importance of data analytics and AI, not just in operational efficiency, but as a core driver of sustainability strategy and innovation, turning vast datasets into actionable environmental insights.</p>
+                                <h4 class="font-semibold text-sky-700">Patenting Trends Point to High-Tech Future</h4>
+                                <p class="mt-2 text-slate-600">A recent EPO report on plastics innovation continues to be a key indicator of long-term trends. The 18-fold increase in patenting activity since 1990, with a major surge after 2015, confirms the industry's rapid shift towards a high-tech, IP-driven model. The report highlights Europe's lead in this area, particularly in AI-driven inventions and technologies for removing plastics from water.</p>
                             </div>
                          </div>
                     </div>
@@ -233,24 +215,24 @@
         <section id="strategy" class="scroll-mt-24 pt-16 space-y-8">
             <div class="text-center">
                 <h2 class="text-3xl font-bold tracking-tight text-slate-900">Concluding Strategic Outlook</h2>
-                <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">The intelligence gathered over the past two weeks points to a clear set of strategic imperatives for Evreka, driven by market consolidation and the complex, evolving demands of the circular economy.</p>
+                <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">This week's intelligence points to a clear set of strategic imperatives for Evreka, driven by competitor execution in key niches and the increasing complexity of regulatory compliance.</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-green-300">
                     <h3 class="font-bold text-green-800 text-lg flex items-center"><span class="text-2xl mr-2">💡</span> Top Opportunity</h3>
-                    <p class="mt-2 text-slate-600">The rapid consolidation in specialized verticals (organics, C&D, MRFs) creates a prime opportunity. As companies like Convertus and Circular Services scale through M&A, they will urgently need a unified, sophisticated software platform to integrate disparate operations. Evreka can be that platform.</p>
+                    <p class="mt-2 text-slate-600">The increasing granularity of EPR regulations (e.g., UK packaging rules) is the single largest opportunity. This complexity makes specialized software a non-negotiable compliance tool. Evreka should aggressively market itself as the "EPR Data Management Engine," turning a regulatory burden into a streamlined, automated process for its clients.</p>
                 </div>
                 <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-red-300">
                     <h3 class="font-bold text-red-800 text-lg flex items-center"><span class="text-2xl mr-2">⚠️</span> Top Threat</h3>
-                    <p class="mt-2 text-slate-600">The failure of New York's EPR bill, combined with policy headwinds in the US biogas sector, signals that relying too heavily on a single type of regulatory driver is risky. Market demand can be delayed or altered by political friction, impacting growth forecasts for compliance-focused software modules.</p>
+                    <p class="mt-2 text-slate-600">Sensoneo's success on two fronts—massive IoT deployments and complex DRS software—is a major threat. They are proving a model that combines hardware-enabled data collection with high-value enterprise software. This dual competence makes them a formidable competitor in bids that require both physical and digital solutions.</p>
                 </div>
                 <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-yellow-300">
                     <h3 class="font-bold text-yellow-800 text-lg flex items-center"><span class="text-2xl mr-2">⚡</span> Immediate Action Item</h3>
-                    <p class="mt-2 text-slate-600">Develop and launch a targeted sales and marketing campaign aimed at recently merged or acquired companies in the waste sector. Highlight Evreka's ability to unify operations, standardize data, and provide enterprise-wide visibility as the perfect post-merger integration tool.</p>
+                    <p class="mt-2 text-slate-600">Develop and launch a targeted marketing campaign focused on the UK market. Create a webinar and a whitepaper titled "Navigating the UK's New EPR Data Maze: A Guide for Producers." Use the specific data requirements from the new rules to demonstrate exactly how the Evreka platform solves this urgent problem.</p>
                 </div>
                 <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-sky-300">
                     <h3 class="font-bold text-sky-800 text-lg flex items-center"><span class="text-2xl mr-2">🔭</span> Future Watchlist</h3>
-                    <p class="mt-2 text-slate-600">Monitor the "design-for-recycling" trend for emerging green technologies (e.g., electrolyzers, solar panels). This will create future demand for software that manages complex end-of-life value chains, a natural extension of Evreka's capabilities.</p>
+                    <p class="mt-2 text-slate-600">Monitor the winners of the EU's Cascade Funding calls, particularly in AI for manufacturing and circular economy solutions. These startups are pre-vetted, funded innovators who could become valuable partners for niche integrations or emerge as future competitors.</p>
                 </div>
             </div>
         </section>
@@ -258,39 +240,34 @@
         <section id="sources" class="scroll-mt-24 pt-16 space-y-8">
             <div class="text-center">
                 <h2 class="text-3xl font-bold tracking-tight text-slate-900">Data Sources</h2>
-                <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">The insights in this briefing are synthesized from the following representative news articles, press releases, and research reports published within the last 14 days.</p>
+                <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">The insights in this briefing are synthesized from the following representative news articles, press releases, and research reports published within the last 7 days.</p>
             </div>
             <div class="bg-white p-6 md:p-8 rounded-lg shadow-sm border border-slate-200">
                 <div class="space-y-6">
                     <div>
                         <h4 class="font-semibold text-slate-800">Competitor & Market News</h4>
                         <ul class="list-disc pl-5 mt-2 space-y-2 text-slate-600">
-                            <li><span class="font-semibold">WM Investor Day Projections:</span> "WM projects up to $29B revenue in 2027, driven by recycling and RNG" - <a href="#" class="text-sky-600 hover:underline">Waste Dive</a></li>
-                            <li><span class="font-semibold">Veolia Expansion & Investment:</span> "Veolia closes $350M in acquisitions as North America CEO departs" - <a href="#" class="text-sky-600 hover:underline">Waste Dive</a></li>
-                            <li><span class="font-semibold">Sensoneo Global Waste Index:</span> "U.S. Ranks High In 2025 Global Waste Index" - <a href="#" class="text-sky-600 hover:underline">BioCycle</a></li>
-                            <li><span class="font-semibold">Routeware Blog:</span> "The Future of Waste Management Is Easy..." - <a href="#" class="text-sky-600 hover:underline">Routeware Official Blog</a></li>
+                            <li><span class="font-semibold">Sensoneo Expansion:</span> "Sensoneo: at the forefront of smart waste management" - <a href="https://www.saftbatteries.com/energizing-iot/sensoneo-forefront-smart-waste-management" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:underline">Saft Batteries</a></li>
+                            <li><span class="font-semibold">M&A Context:</span> "Top 5 waste companies spent nearly $1.5B on M&A in Q1" - <a href="https://www.wastedive.com/news/q1-2025-waste-recycling-acquisition-spending/747198/" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:underline">Waste Dive</a></li>
                         </ul>
                     </div>
                     <div class="border-t border-slate-200 pt-6">
-                        <h4 class="font-semibold text-slate-800">M&A and Regulation</h4>
+                        <h4 class="font-semibold text-slate-800">Regulation & Policy</h4>
                         <ul class="list-disc pl-5 mt-2 space-y-2 text-slate-600">
-                            <li><span class="font-semibold">Convertus Acquires AIM Group:</span> "Convertus Announces Acquisition of AIM Group of Companies" - <a href="#" class="text-sky-600 hover:underline">Waste Advantage Magazine</a></li>
-                            <li><span class="font-semibold">Circular Services Expands:</span> "Circular Services to operate two MRFs in Mecklenburg County, North Carolina" - <a href="#" class="text-sky-600 hover:underline">Waste Dive</a></li>
-                            <li><span class="font-semibold">Maine EPR Law Update:</span> "Maine alters packaging EPR law, to industry's relief" - <a href="#" class="text-sky-600 hover:underline">Waste Dive</a></li>
-                             <li><span class="font-semibold">US Biogas RFS Update:</span> "Biogas groups disappointed by EPA's proposed RFS update" - <a href="#" class="text-sky-600 hover:underline">Waste Dive</a></li>
+                            <li><span class="font-semibold">UK EPR Guidance:</span> "Extended producer responsibility for packaging: who is affected and what to do" - <a href="https://www.gov.uk/guidance/extended-producer-responsibility-for-packaging-who-is-affected-and-what-to-do" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:underline">GOV.UK</a></li>
                         </ul>
                     </div>
                      <div class="border-t border-slate-200 pt-6">
                         <h4 class="font-semibold text-slate-800">Innovators, Startups & Funding</h4>
                         <ul class="list-disc pl-5 mt-2 space-y-2 text-slate-600">
-                             <li><span class="font-semibold">Amazon Sustainability Accelerator:</span> "Build, scale, impact: Applications for the Amazon Sustainability Accelerator 2025 are now open!" - <a href="#" class="text-sky-600 hover:underline">BeBeez</a></li>
+                             <li><span class="font-semibold">EU Cascade Funding:</span> "Cascade Funding Opportunities – July 2025" - <a href="https://cascade-funding.eu/cascade-funding-opportunities-july-2025/" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:underline">Cascade-Funding.eu</a></li>
                         </ul>
                     </div>
                      <div class="border-t border-slate-200 pt-6">
                         <h4 class="font-semibold text-slate-800">Future Tech & IP</h4>
                         <ul class="list-disc pl-5 mt-2 space-y-2 text-slate-600">
-                            <li><span class="font-semibold">Green Tech & Organics Research:</span> "Recycling, Volume 10, Issue 3 (June 2025)" - <a href="#" class="text-sky-600 hover:underline">MDPI Academic Journals</a></li>
-                             <li><span class="font-semibold">EPO CodeFest:</span> "EPO Announces Six CodeFest Finalists Advancing Sustainability Through Patent Data" - <a href="#" class="text-sky-600 hover:underline">IPWatchdog</a></li>
+                            <li><span class="font-semibold">Smart Waste Management Research:</span> "Revolutionizing Urban Solid Waste Management with AI and IoT" - <a href="https://www.researchgate.net/publication/387947812_Revolutionizing_Urban_Solid_Waste_Management_with_AI_and_IoT_A_review_of_smart_solutions_for_waste_collection_sorting_and_recycling" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:underline">ResearchGate</a></li>
+                             <li><span class="font-semibold">EPO Patent Report:</span> "Plastics in Transition: EPO Report Highlights Innovation Surge" - <a href="https://www.mewburn.com/news-insights/plastics-in-transition-epo-report-highlights-innovation-surge" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:underline">Mewburn Ellis / EPO</a></li>
                         </ul>
                     </div>
                 </div>
@@ -304,37 +281,41 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Data Store ---
     const competitorData = {
         'Sensoneo': {
-            title: 'Sensoneo: Thought Leadership with Global Waste Index',
+            title: 'Sensoneo: Showcasing Major Traction on Two Fronts',
             content: `
-                <p class="text-slate-600 mb-4"><strong>Activity:</strong> Sensoneo released its 2025 Global Waste Index, a comprehensive report comparing waste management performance across 38 OECD countries. The report, covered by outlets like BioCycle on June 18, positions Sensoneo as a data-driven thought leader. It notably highlighted that the U.S. per capita waste generation has increased significantly since the 2022 report.</p>
+                <p class="text-slate-600 mb-4"><strong>Activity:</strong> In an interview published on July 4th, Sensoneo's Head of Marketing detailed significant recent achievements. These include securing a €6.2 million Series A investment, winning a contract for the world's largest smart waste installation (11,000+ sensors in Madrid), and becoming the sole provider of end-to-end Deposit Return Scheme (DRS) software for 6 EU countries. They also highlighted that their Factory Waste Management solution is now used by Fortune 500 companies.</p>
+                <h5 class="font-semibold text-slate-700 mb-2">Key Developments:</h5>
+                <ul class="list-disc pl-5 space-y-2 text-slate-600">
+                    <li><strong>Massive IoT Deployment:</strong> The Madrid project validates their ability to deliver smart city solutions at an unprecedented scale.</li>
+                    <li><strong>DRS Software Dominance:</strong> Being the only provider for 6 national DRS systems establishes a powerful moat in a complex, high-value compliance market.</li>
+                    <li><strong>Enterprise Validation:</strong> Securing Fortune 500 clients for their factory waste solution proves their ability to sell upmarket into the industrial sector.</li>
+                </ul>
             `,
-            takeaway: `This is a powerful content marketing play that enhances Sensoneo's brand credibility, especially with municipal and governmental clients who are the primary audience for such a report. For Evreka, this data is a valuable sales tool. It can be used to initiate conversations with prospects in underperforming countries (like the U.S.), demonstrating how Evreka's platform can provide the granular data and operational efficiencies needed to improve their global ranking and meet sustainability goals.`
+            takeaway: `Sensoneo is now a formidable dual threat. They are a leader in large-scale hardware/IoT deployments and a dominant player in complex, country-level compliance software. This makes them a direct and serious competitor for deals that require either or both capabilities. Evreka must clearly define its competitive differentiation against them—is it a more open platform, superior analytics, a different geographic focus, or a more agile implementation process?`
         },
         'Routeware': {
-            title: 'Routeware: Messaging "Easy" and "Local"',
-            content: `
-                <p class="text-slate-600 mb-4"><strong>Activity:</strong> In a blog post on June 23, Routeware positioned its technology as the key to making the future of waste management "easy." This messaging focuses on simplifying complex operations through automation and real-time data. This follows earlier communications reinforcing their focus on the "local" needs of the municipal sector, particularly ahead of the CRRA Conference.</p>
-            `,
-            takeaway: `Routeware is crafting a narrative of simplicity and local focus to appeal to municipalities and haulers who may be intimidated by digital transformations. This is a direct competitive threat. Evreka must counter this by framing "simplicity" as a baseline expectation, and highlighting its own platform's advanced capabilities—such as deep analytics for circular economy reporting and multi-state EPR compliance—as the true drivers of future profitability and sustainability, moving beyond just operational ease.`
+            title: 'Routeware: No Major Announcements',
+            content: `<p class="text-slate-600"><strong>Activity:</strong> No major announcements or news were released in the last 7 days.</p>`,
+            takeaway: `The relative quiet from major North American players like Routeware creates a window of opportunity to be proactive in the market with targeted campaigns and thought leadership content.`
         },
         'AMCS Group': {
             title: 'AMCS Group: No Major Announcements',
-            content: `<p class="text-slate-600"><strong>Activity:</strong> No major product announcements or news were released in the last 14 days. Recent activities relate to their earlier Spring 2025 release.</p>`,
+            content: `<p class="text-slate-600"><strong>Activity:</strong> No major announcements or news were released in the last 7 days. News mentions of "AMC" refer to the unrelated AMC Networks.</p>`,
             takeaway: `While quiet this week, AMCS's recent launch of AMCS Pay remains a significant strategic move. Evreka should continue to monitor their go-to-market strategy for this new fintech offering and accelerate its own roadmap to ensure competitive parity in integrated payments.`
         },
         'Rubicon': {
             title: 'Rubicon: No Major Announcements',
-            content: `<p class="text-slate-600"><strong>Activity:</strong> No major product announcements or news were released in the last 14 days. News mentions of "Rubicon" in this period refer to unrelated entities like Team Rubicon (a disaster relief NGO) or Rubicon Carbon.</p>`,
+            content: `<p class="text-slate-600"><strong>Activity:</strong> No major announcements or news were released in the last 7 days. The company's situation remains focused on the previously reported sale process.</p>`,
             takeaway: `Rubicon's continued market silence reinforces the opportunity for competitors to target their at-risk customer base. Emphasizing stability and a clear innovation roadmap remains a key strategy for attracting accounts concerned about Rubicon's long-term direction.`
         },
         'Compology': {
             title: 'Compology (as part of RoadRunner): No Major Announcements',
-            content: `<p class="text-slate-600"><strong>Activity:</strong> No major announcements or news were released in the last 14 days.</p>`,
+            content: `<p class="text-slate-600"><strong>Activity:</strong> No major announcements or news were released in the last 7 days.</p>`,
             takeaway: `The strategic value proposition of positioning Evreka as the flexible, hardware-agnostic "open platform" alternative to the closed RoadRunner/Compology ecosystem remains a key point of differentiation in the North American market.`
         },
         'Waste Logics': {
             title: 'Waste Logics: No Major Announcements',
-            content: `<p class="text-slate-600"><strong>Activity:</strong> No major announcements or news were released in the last 14 days.</p>`,
+            content: `<p class="text-slate-600"><strong>Activity:</strong> No major announcements or news were released in the last 7 days.</p>`,
             takeaway: `Waste Logics remains a strong regional competitor in the UK. The opportunity for Evreka continues to be targeting larger, multinational UK-based clients who require global compliance and circularity features beyond the scope of a local provider.`
         }
     };
@@ -437,18 +418,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 2. Capital Chart (Placeholder/Contextual)
+    // 2. Capital Chart (M&A Context)
     const capitalCtx = document.getElementById('capitalChart');
     if (capitalCtx) {
         new Chart(capitalCtx.getContext('2d'), {
             type: 'bar',
             data: {
-                labels: ["CurbWaste (Venture Capital)", "Crusoe (Credit Facility)"],
+                labels: ["Republic", "Waste Connections", "GFL", "Casella", "WM"],
                 datasets: [{
-                    label: 'Capital Raised (USD)',
-                    data: [10000000, 750000000],
-                    backgroundColor: [chartColors.primaryBg, chartColors.secondaryBg],
-                    borderColor: [chartColors.primary, chartColors.secondary],
+                    label: 'Q1 2025 M&A Spend (USD)',
+                    data: [826000000, 380400000, 173000000, 103600000, 7000000],
+                    backgroundColor: [chartColors.primaryBg, chartColors.primaryBg, chartColors.primaryBg, chartColors.primaryBg, chartColors.primaryBg],
+                    borderColor: [chartColors.primary, chartColors.primary, chartColors.primary, chartColors.primary, chartColors.primary],
                     borderWidth: 1
                 }]
             },
@@ -484,36 +465,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    // 3. Patent Chart
-    const patentCtx = document.getElementById('patentChart').getContext('2d');
-    new Chart(patentCtx, {
-        type: 'line',
-        data: {
-            labels: ['2015', '2017', '2019', '2021', '2023'],
-            datasets: [{
-                label: 'Patent Activity Growth Index',
-                data: [100, 250, 600, 1100, 1800],
-                fill: true,
-                borderColor: chartColors.primary,
-                backgroundColor: chartColors.primaryBg,
-                tension: 0.3
-            }]
-        },
-        options: {
-         ...defaultChartOptions,
-             scales: {
-                x: {
-                    ticks: { color: chartColors.text },
-                    grid: { display: false }
-                },
-                y: {
-                    ticks: { color: chartColors.text, callback: (v) => v > 0 ? v/100 + 'x' : v },
-                    grid: { color: chartColors.grid }
-                }
-            },
-        }
-    });
-
     // --- Interactivity Logic ---
 
     // Competitor Tabs
