@@ -11,13 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         /* Chosen Palette: Calm Harmony */
-        /* Application Structure Plan: A thematic, dashboard-style SPA. The structure is non-linear, using a sticky top navigation bar (Dashboard, Competitive Matrix, Market Drivers, Innovation Watch, Strategic Imperatives) to allow users to jump to sections that answer their specific strategic questions. This is more efficient for busy executives than a linear report. Key interactions include tabbed content panes to reduce clutter, clickable elements to reveal detailed analysis, and dynamic charts to visualize key quantitative data. This design prioritizes synthesis and quick access to insights over mimicking the source document's layout. */
-        /* Visualization & Content Choices: 
-            - Dashboard Funding Chart: Horizontal Bar (Chart.js) -> Goal: Inform/Compare -> Interaction: Hover tooltips -> Justification: Provides an immediate quantitative snapshot of the startup landscape.
-            - Competitor Grid: HTML/CSS Flexbox -> Goal: Organize/Compare -> Interaction: Click to reveal details -> Justification: Allows for quick scanning and direct comparison of competitors without a wall of text.
-            - Patent Trend Chart: Line (Chart.js) -> Goal: Show Change -> Interaction: Hover tooltips -> Justification: Clearly illustrates the exponential growth in IP activity mentioned in the report.
-            - DPP Flow Diagram: HTML/CSS/Unicode -> Goal: Inform/Organize -> Interaction: None -> Justification: A simple, text-based visual to explain a key regulatory concept without using forbidden SVG.
-        */
+        /* Application Structure Plan: A thematic, dashboard-style SPA with an archival feature. A dropdown in the header controls which weekly briefing is visible. Each briefing is a self-contained <main> element. This allows for historical review while keeping the interface clean. Key interactions include tabbed content panes to reduce clutter, and clickable elements to reveal detailed analysis. */
         /* CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. */
         body {
             font-family: 'Inter', sans-serif;
@@ -31,26 +25,12 @@
             color: #0369a1; /* sky-700 */
             border-bottom-color: #0369a1;
         }
-       .chart-container {
-            position: relative;
-            width: 100%;
-            margin-left: auto;
-            margin-right: auto;
-            max-width: 800px;
-            height: 300px;
-        }
-        @media (min-width: 768px) {
-           .chart-container {
-                height: 400px;
-            }
-        }
        .tab-button.active {
             background-color: #1e293b; /* slate-800 */
             color: #ffffff;
         }
-        #market-tabs .active {
-             border-color: #0ea5e9; /* sky-500 */
-             color: #0284c7; /* sky-600 */
+        main.hidden {
+            display: none;
         }
     </style>
 </head>
@@ -62,383 +42,1138 @@
                 <div class="flex-shrink-0">
                     <h1 class="text-xl font-bold text-slate-800">Waste Tech Intelligence</h1>
                 </div>
-                <nav class="hidden md:block">
-                    <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="#dashboard" class="nav-link px-3 py-2 rounded-md text-sm font-semibold text-slate-600 hover:text-sky-700 border-b-2 border-transparent">Dashboard</a>
-                        <a href="#competitors" class="nav-link px-3 py-2 rounded-md text-sm font-semibold text-slate-600 hover:text-sky-700 border-b-2 border-transparent">Competitors</a>
-                        <a href="#market-drivers" class="nav-link px-3 py-2 rounded-md text-sm font-semibold text-slate-600 hover:text-sky-700 border-b-2 border-transparent">Market Drivers</a>
-                        <a href="#innovation" class="nav-link px-3 py-2 rounded-md text-sm font-semibold text-slate-600 hover:text-sky-700 border-b-2 border-transparent">Innovation Watch</a>
-                        <a href="#strategy" class="nav-link px-3 py-2 rounded-md text-sm font-semibold text-slate-600 hover:text-sky-700 border-b-2 border-transparent">Strategic Imperatives</a>
-                        <a href="#sources" class="nav-link px-3 py-2 rounded-md text-sm font-semibold text-slate-600 hover:text-sky-700 border-b-2 border-transparent">Sources</a>
+                <div class="flex items-center">
+                    <nav class="hidden md:block">
+                        <div class="ml-10 flex items-baseline space-x-4">
+                            <a href="#dashboard" class="nav-link px-3 py-2 rounded-md text-sm font-semibold text-slate-600 hover:text-sky-700 border-b-2 border-transparent">Dashboard</a>
+                            <a href="#competitors" class="nav-link px-3 py-2 rounded-md text-sm font-semibold text-slate-600 hover:text-sky-700 border-b-2 border-transparent">Competitors</a>
+                            <a href="#market-drivers" class="nav-link px-3 py-2 rounded-md text-sm font-semibold text-slate-600 hover:text-sky-700 border-b-2 border-transparent">Market Drivers</a>
+                        </div>
+                    </nav>
+                    <div class="ml-4">
+                        <label for="briefing-selector" class="sr-only">Select Briefing Week</label>
+                        <select id="briefing-selector" name="briefing-selector" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm rounded-md">
+                            <option value="2025-09-15" selected>Week of Sep 15, 2025</option>
+                            <option value="2025-09-08">Week of Sep 8, 2025</option>
+                            <option value="2025-09-01">Week of Sep 1, 2025</option>
+                            <option value="2025-08-25">Week of Aug 25, 2025</option>
+                            <option value="2025-08-18">Week of Aug 18, 2025</option>
+                            <option value="2025-08-11">Week of Aug 11, 2025</option>
+                            <option value="2025-08-04">Week of Aug 4, 2025</option>
+                            <option value="2025-07-28">Week of Jul 28, 2025</option>
+                        </select>
                     </div>
-                </nav>
+                </div>
             </div>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-
-        <section id="dashboard" class="scroll-mt-24 space-y-8">
-            <div class="text-center">
-                <p class="text-base font-semibold text-sky-600">Weekly Intelligence Briefing: August 25, 2025</p>
-                <h2 class="mt-2 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">The Digital Passport Era Begins</h2>
-                <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">This week marks a pivotal shift in the regulatory landscape as the EU's Digital Product Passport (DPP) mandate for batteries officially comes into force, creating an immediate, compliance-driven market for sophisticated data management software. Competitors like AMCS are aggressively shaping the market narrative around "Performance Sustainability," while international partnerships, such as the one between Istanbul and Jakarta, highlight a growing global focus on advanced waste management practices. For Evreka, the imperative is clear: capture the greenfield DPP opportunity, counter competitor narratives with a strong value proposition, and leverage global trends to inform product strategy.</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
-                    <h3 class="font-bold text-slate-800">1. EU Digital Product Passport is Live</h3>
-                    <p class="mt-2 text-sm text-slate-600">As of August 18, the EU Battery Regulation is fully in effect, replacing the old directive. This makes the Digital Product Passport a mandatory requirement, creating an urgent, legally-binding need for software that can manage detailed lifecycle data for products sold in the EU.</p>
+    <main id="briefing-2025-09-15">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <section id="dashboard" class="scroll-mt-24 space-y-8">
+                <div class="text-center">
+                    <p class="text-base font-semibold text-sky-600">Weekly Intelligence Briefing: September 15, 2025</p>
+                    <h2 class="mt-2 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">The Reality of Digital Transformation</h2>
+                    <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">This week's intelligence reveals the tangible outcomes of digital transformation in the waste sector. Sensoneo's deployment with Gorenje in Slovenia showcases a concrete 30% cost reduction through smart routing, providing a powerful ROI metric for the entire industry. This is paired with significant investment flowing into the US recycling infrastructure, funded by brand owners under new EPR laws. The message is clear: the era of theoretical benefits is over, and the market now demands proven, data-driven results and the software to manage new, complex funding streams.</p>
                 </div>
-                <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
-                    <h3 class="font-bold text-slate-800">2. AMCS Pushes "Performance Sustainability"</h3>
-                    <p class="mt-2 text-sm text-slate-600">AMCS held multiple webinars this week promoting its "Performance Sustainability" concept. This is a direct competitive move to own the market narrative, linking sustainability software directly to profitability and operational efficiency, raising the bar for how value is communicated to customers.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                        <h3 class="font-bold text-slate-800">1. Sensoneo & Gorenje Prove 30% Savings</h3>
+                        <p class="mt-2 text-sm text-slate-600">Sensoneo announced a successful smart waste project with Gorenje in Slovenia, using their route planning and sensor technology to achieve a verified 30% reduction in waste collection costs. This provides a hard data point and a powerful case study for the entire SaaS sector.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                        <h3 class="font-bold text-slate-800">2. $5.1M Injected into US Recycling</h3>
+                        <p class="mt-2 text-sm text-slate-600">The Recycling Partnership has awarded $5.1 million in grants to 11 US MRFs, funded by major brands like Coca-Cola and PepsiCo under state EPR programs. This shows EPR capital flowing to directly upgrade recycling infrastructure and technology.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                        <h3 class="font-bold text-slate-800">3. Irish Government Targets C&D Waste</h3>
+                        <p class="mt-2 text-sm text-slate-600">Ireland's EPA is launching a new "Circular Construction" conference. This high-level government focus on construction and demolition (C&D) waste signals a growing regulatory and commercial emphasis on this specific, high-volume waste stream in a key Evreka market.</p>
+                    </div>
                 </div>
-                <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
-                    <h3 class="font-bold text-slate-800">3. Global Knowledge-Sharing Accelerates</h3>
-                    <p class="mt-2 text-sm text-slate-600">A new partnership between Istanbul and Jakarta to collaborate on waste management, including landfill operations and carbon credits, signals a growing trend of international cooperation. This indicates an expanding global market for advanced, proven waste-tech solutions and best practices.</p>
+            </section>
+
+            <section id="competitors" class="scroll-mt-24 pt-16 space-y-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold tracking-tight text-slate-900">Competitive Matrix</h2>
+                     <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">An overview of competitor activities, focusing on direct SaaS players, focus market developments, and significant news from the broader industry watchlist.</p>
                 </div>
-            </div>
-            
-            <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
-                <h3 class="text-lg font-semibold text-slate-800 text-center mb-4">Recent Innovation Funding Context</h3>
-                <p class="text-center text-sm text-slate-500 mb-4">While no major new funding rounds were announced this week, this chart of recent investments provides context on where capital has been flowing. The landscape shows a mix of SaaS, advanced recycling, and large-scale "waste-as-a-resource" infrastructure plays.</p>
-                <div class="chart-container">
-                    <canvas id="fundingChart"></canvas>
+                
+                <div class="flex flex-wrap justify-center gap-4 mb-8" id="competitor-tabs-2025-09-15"></div>
+                <div id="competitor-content-2025-09-15" class="bg-white p-6 md:p-8 rounded-lg shadow-sm border border-slate-200 min-h-[300px]"></div>
+            </section>
+
+            <section id="market-drivers" class="scroll-mt-24 pt-16 space-y-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold tracking-tight text-slate-900">Market Drivers</h2>
+                    <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">The market is now being driven by tangible results and new economic models. The demand is shifting from software that enables efficiency to software that can prove financial returns and manage complex, multi-stakeholder funding mechanisms mandated by regulation.</p>
                 </div>
-            </div>
 
-        </section>
-
-        <section id="competitors" class="scroll-mt-24 pt-16 space-y-8">
-            <div class="text-center">
-                <h2 class="text-3xl font-bold tracking-tight text-slate-900">Competitive Matrix</h2>
-                <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">This section provides an interactive overview of the competitive landscape. Select a competitor group to analyze their recent activities, strategic positioning, and the direct implications for Evreka's strategy.</p>
-            </div>
-            
-            <div class="flex flex-wrap justify-center gap-4 mb-8" id="competitor-tabs">
-            </div>
-
-            <div id="competitor-content" class="bg-white p-6 md:p-8 rounded-lg shadow-sm border border-slate-200 min-h-[300px]">
-            </div>
-        </section>
-
-        <section id="market-drivers" class="scroll-mt-24 pt-16 space-y-8">
-            <div class="text-center">
-                <h2 class="text-3xl font-bold tracking-tight text-slate-900">Market Drivers</h2>
-                <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">The market is being shaped by two primary forces: the increasing complexity of environmental regulations, which creates compliance-driven demand, and the strategic flow of capital towards vertical integration and specialized material streams.</p>
-            </div>
-
-            <div class="bg-white rounded-lg shadow-sm border border-slate-200">
-                <div class="border-b border-slate-200">
-                    <nav class="-mb-px flex space-x-6 px-6" id="market-tabs">
-                        <button data-tab="regulation" class="active shrink-0 border-b-2 px-1 py-4 text-sm font-medium hover:border-slate-300 hover:text-slate-700">Regulation & Policy</button>
-                        <button data-tab="capital" class="shrink-0 border-b-2 border-transparent px-1 py-4 text-sm font-medium text-slate-500 hover:border-slate-300 hover:text-slate-700">Capital & Investment</button>
-                    </nav>
-                </div>
-                <div class="p-6 md:p-8">
-                    <div id="regulation-content" class="market-content-pane">
-                        <h3 class="text-xl font-bold text-slate-800 mb-4">The Digital Product Passport (DPP) Era is Here</h3>
+                <div class="bg-white rounded-lg shadow-sm border border-slate-200">
+                    <div class="p-6 md:p-8">
+                        <h3 class="text-xl font-bold text-slate-800 mb-4">From ROI Claims to ROI Proof</h3>
                         <div class="space-y-6">
                             <div>
-                                <h4 class="font-semibold text-sky-700">From Directive to Regulation: A Legally Binding Mandate</h4>
-                                <p class="mt-2 text-slate-600">As of August 18, 2025, the EU's new Battery Regulation is fully in force, officially replacing the previous directive. This is a critical legal distinction: directives require member states to enact their own laws, while regulations are directly and uniformly applicable across all 27 EU countries. This act makes the Digital Product Passport a mandatory, non-negotiable requirement for batteries placed on the EU market. The DPP must be complete, accurate, and continuously updated throughout the product's lifecycle, creating an immediate and urgent need for a robust software solution to manage this data.</p>
-                            </div>
-                             <div>
-                                <h4 class="font-semibold text-sky-700">A Greenfield Market for Compliance-as-a-Service</h4>
-                                <p class="mt-2 text-slate-600">The DPP mandate for batteries is the first wave of a much broader regulatory push under the Ecodesign for Sustainable Products Regulation (ESPR). Similar DPP requirements are already in the pipeline for textiles, electronics, and construction materials. This creates a massive, greenfield market opportunity for a "Compliance-as-a-Service" platform. Companies will need a scalable solution to collect, manage, and share granular product-level data across their entire supply chain. This is no longer about operational efficiency; it is about the legal right to sell products in one of the world's largest markets.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="capital-content" class="market-content-pane hidden">
-                         <h3 class="text-xl font-bold text-slate-800 mb-4">International Partnerships and EPR-Driven Funding</h3>
-                         <div class="space-y-6">
-                            <div>
-                                <h4 class="font-semibold text-sky-700">Global Knowledge Transfer Creates New Markets</h4>
-                                <p class="mt-2 text-slate-600">The formal collaboration between Istanbul and Jakarta on waste management, including landfill operations, compost production, and carbon credits, is a strong indicator of a global trend. As emerging economies seek to modernize their infrastructure, they are looking to established players for proven technologies and best practices. This creates opportunities for software providers like Evreka to enter new markets as part of these knowledge-sharing agreements, offering a ready-made digital foundation for these modernization efforts.</p>
+                                <h4 class="font-semibold text-sky-700">The Power of a Real Number</h4>
+                                <p class="mt-2 text-slate-600">Sensoneo's announcement of a 30% cost saving with Gorenje is a significant market event. It moves the conversation about smart waste from theoretical benefits to a hard, verifiable ROI figure. This case study will be used by competitors and sets a new standard for sales conversations. Customers will no longer be satisfied with vague promises of "efficiency"; they will now demand specific, quantifiable cost reductions, backed by real-world examples. This puts pressure on all SaaS providers to develop and market their own compelling, data-driven case studies.</p>
                             </div>
                             <div>
-                                <h4 class="font-semibold text-sky-700">EPR Continues to Drive Capital Flow</h4>
-                                <p class="mt-2 text-slate-600">In California, brands are now directly offering funding to recyclers to improve the collection of film and flexible packaging. This is a direct result of the state's EPR law (SB 54). This trend shows how capital is flowing from producers to recyclers to build the infrastructure necessary to meet compliance targets. This creates a need for software that can manage these financial flows, track material recovery rates, and provide auditable data back to the producers to prove their EPR obligations are being met.</p>
+                                <h4 class="font-semibold text-sky-700">EPR Creates a New Financial Ecosystem</h4>
+                                <p class="mt-2 text-slate-600">The $5.1 million in grants flowing from brand owners to MRFs via The Recycling Partnership is a clear demonstration of Extended Producer Responsibility (EPR) in action. This isn't government subsidy; it's private capital being deployed to meet regulatory requirements. This creates an entirely new layer of financial and data management. MRFs will need software to apply for these grants, track the use of funds against specific upgrades (e.g., new optical sorters), and report performance improvements back to the producer responsibility organizations (PROs) to demonstrate compliance. This is a greenfield opportunity for a software platform that can manage this multi-stakeholder financial and operational data flow.</p>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <section id="innovation" class="scroll-mt-24 pt-16 space-y-8">
-            <div class="text-center">
-                <h2 class="text-3xl font-bold tracking-tight text-slate-900">Innovation Watch</h2>
-                <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">This section tracks the next wave of industry innovation. While no major new patents were filed this week, the established technology trajectory towards automation continues to inform strategy, and market data highlights the scale of key sectors.</p>
-            </div>
+             <section id="strategic-inputs" class="scroll-mt-24 pt-16 space-y-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold tracking-tight text-slate-900">Concluding Strategic Inputs</h2>
+                    <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">This week's events demand a focus on quantifiable results and specialized, regulation-driven market segments.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-green-300">
+                        <h3 class="font-bold text-green-800 text-lg flex items-center"><span class="text-2xl mr-2">💡</span> Top Opportunity</h3>
+                        <p class="mt-2 text-slate-600">The flow of EPR funds to MRFs creates a new, urgent need for "grant compliance" software. Evreka can be a first-mover by developing a module specifically for MRFs to manage applications, track capital expenditures, and report on performance improvements to PROs.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-red-300">
+                        <h3 class="font-bold text-red-800 text-lg flex items-center"><span class="text-2xl mr-2">⚠️</span> Top Threat</h3>
+                        <p class="mt-2 text-slate-600">Sensoneo's highly-marketable "30% cost savings" case study is a direct competitive threat. It sets a new benchmark for ROI and will be used against Evreka in sales cycles. A lack of equally strong, quantifiable proof points will become a significant disadvantage.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-yellow-300">
+                        <h3 class="font-bold text-yellow-800 text-lg flex items-center"><span class="text-2xl mr-2">⚡</span> Immediate Action Item</h3>
+                        <p class="mt-2 text-slate-600">Task the marketing and customer success teams with a joint "Case Study Sprint" to identify, quantify, and write up the most compelling ROI stories from existing Evreka customers to counter the Sensoneo narrative.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-sky-300">
+                        <h3 class="font-bold text-sky-800 text-lg flex items-center"><span class="text-2xl mr-2">🔭</span> Future Watchlist</h3>
+                        <p class="mt-2 text-slate-600">Monitor the development of EPR programs in other US states. The model of brand-funded infrastructure grants is likely to be replicated, creating a growing national market for the "grant compliance" software module.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="recommendations" class="scroll-mt-24 pt-16 space-y-8">
+                 <div class="bg-white p-6 md:p-8 rounded-lg shadow-sm border border-slate-200">
+                     <h3 class="text-xl font-bold text-slate-800 mb-4 text-center">Actionable Recommendations by Team</h3>
+                     <div class="space-y-6">
+                        <div>
+                            <h4 class="font-bold text-lg text-sky-700">📦 For Product Management</h4>
+                            <ul class="list-disc list-inside space-y-2 mt-2 text-slate-600">
+                                <li><strong>Scope an "EPR Grant Management" Module:</strong> Begin discovery for a feature set that allows MRFs to manage the entire lifecycle of EPR grants, from application to reporting.</li>
+                                <li><strong>Instrument for ROI Metrics:</strong> Review the platform's analytics capabilities. Can we easily extract data to prove cost savings (fuel, time, maintenance) for our customers? Prioritize dashboards that make this data visible.</li>
+                                <li><strong>Deepen C&D Waste Features:</strong> In light of the Irish EPA's focus, schedule discovery calls with Irish C&D companies to identify specific software needs and pain points that Evreka can solve.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-sky-700">🎯 For Marketing</h4>
+                             <ul class="list-disc list-inside space-y-2 mt-2 text-slate-600">
+                                <li><strong>Launch a "Proof, Not Promises" Campaign:</strong> Create content (blogs, social posts, one-pagers) that focuses on the quantifiable results Evreka delivers, directly countering the industry's shift towards proven ROI.</li>
+                                <li><strong>Develop an "Irish C&D Leadership" Playbook:</strong> Create targeted content for the Irish market about optimizing C&D waste management. Sponsor or speak at the EPA conference to build brand presence.</li>
+                                <li><strong>Promote MRF Grant Opportunities:</strong> Create content that explains how MRFs can access new EPR funding and position Evreka as the software needed to manage this new complexity.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-sky-700">💬 For Sales</h4>
+                             <ul class="list-disc list-inside space-y-2 mt-2 text-slate-600">
+                                <li><strong>Arm the Team with ROI Data:</strong> Provide the sales team with any and all quantifiable data points from existing customers to proactively counter the "Sensoneo 30%" claim.</li>
+                                <li><strong>Target US MRFs Receiving Grants:</strong> The 11 MRFs that received funding are now prime prospects. They have fresh capital and a mandate to upgrade. Reach out to them immediately.</li>
+                                <li><strong>Use the EPA Conference as a Reason to Call in Ireland:</strong> Contact all C&D prospects in Ireland, reference the upcoming EPA conference, and ask them about their strategy for circularity and data management.</li>
+                            </ul>
+                        </div>
+                     </div>
+                </div>
+            </section>
             
-            <div class="bg-white rounded-lg shadow-sm border border-slate-200">
-                <div class="p-6 md:p-8 space-y-8">
-                    <div>
-                        <h3 class="text-xl font-bold text-slate-800 mb-4 text-center">Established Tech Trajectory: The Automated MRF</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                            <div class="md:col-span-1 bg-slate-50 p-6 rounded-lg border">
-                                <h4 class="font-semibold text-sky-700">The "Brain": AI & Vision Systems</h4>
-                                <p class="mt-2 text-slate-600">The core software intelligence layer for any automated sorting system remains the AI-powered vision system. The technology, as detailed in recent patents, uses machine learning to accurately classify waste items in real-time, providing the decision-making engine for robotic sorting.</p>
-                            </div>
-                            <div class="md:col-span-1 bg-slate-50 p-6 rounded-lg border">
-                                <h4 class="font-semibold text-sky-700">The "Hands": Robotics & Hardware</h4>
-                                <p class="mt-2 text-slate-600">Specialized hardware, such as robotic end-effectors, continues to be developed to act on the decisions made by AI. The innovation in this area is focused on creating the physical tools needed to manipulate a wide variety of materials in a complex waste stream.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="border-t border-slate-200 pt-8">
-                         <h3 class="text-xl font-bold text-slate-800 mb-4 text-center">Market Sizing and Growth Indicators</h3>
-                         <div class="space-y-4">
-                             <p class="text-slate-600"><strong class="text-slate-700">Scale of the Dutch Market:</strong> A report from Afvalgids.nl highlights the scale of the Dutch waste and recycling sector, with over 1,700 companies operating at more than 3,200 locations. This data provides a tangible measure of the total addressable market for SaaS solutions in a key European region.</p>
-                             <p class="text-slate-600"><strong class="text-slate-700">E-Waste Recovery Rates:</strong> Data from the Netherlands also shows that 75% of the raw materials in a typical display screen are now being successfully recovered. This high recovery rate for a complex product underscores the growing technical sophistication of the e-waste recycling sector, a prime target for specialized management software.</p>
-                         </div>
-                    </div>
+            <section id="sources" class="scroll-mt-24 pt-16 space-y-8">
+                <div class="bg-white p-6 md:p-8 rounded-lg shadow-sm border border-slate-200">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 text-center">Data Sources</h3>
+                    <ul class="list-disc list-inside space-y-2 text-slate-600">
+                        <li><a href="https://sensoneo.com/press/" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:underline">Sensoneo Press Release on Gorenje Project</a></li>
+                        <li><a href="https://recyclingpartnership.org/recycling-partnership-awards-5-1-million/" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:underline">The Recycling Partnership Announces $5.1 Million in Grants</a></li>
+                        <li><a href="https://www.epa.ie/news-releases/news-releases-2025/" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:underline">Irish EPA Announces Circular Construction Conference</a></li>
+                    </ul>
                 </div>
-            </div>
-        </section>
-
-
-        <section id="strategy" class="scroll-mt-24 pt-16 space-y-8">
-            <div class="text-center">
-                <h2 class="text-3xl font-bold tracking-tight text-slate-900">Concluding Strategic Imperatives</h2>
-                <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">This week's intelligence points to a clear set of strategic imperatives for Evreka, driven by regulatory tailwinds, technological evolution, and emerging market needs.</p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-green-300">
-                    <h3 class="font-bold text-green-800 text-lg flex items-center"><span class="text-2xl mr-2">💡</span> Top Opportunity</h3>
-                    <p class="mt-2 text-slate-600">The EU's Digital Product Passport is now a live, mandatory requirement. This creates an immediate, greenfield software market. Evreka can be a first-mover by developing a specialized module for DPP data management, positioning itself as an essential compliance partner for any company selling products in the EU.</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-red-300">
-                    <h3 class="font-bold text-red-800 text-lg flex items-center"><span class="text-2xl mr-2">⚠️</span> Top Threat</h3>
-                    <p class="mt-2 text-slate-600">AMCS's aggressive marketing of "Performance Sustainability" is a direct attempt to own the market narrative. Their webinars and content are designed to frame the conversation around their specific value proposition, potentially making it harder for Evreka to compete on deals where this narrative has already taken hold.</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-yellow-300">
-                    <h3 class="font-bold text-yellow-800 text-lg flex items-center"><span class="text-2xl mr-2">⚡</span> Immediate Action Item</h3>
-                    <p class="mt-2 text-slate-600">Task the product team with a rapid discovery sprint to define the MVP for a "Digital Product Passport Compliance Module," starting with the battery sector. Engage with industry associations and potential customers to validate requirements for this legally mandated data management tool.</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-sky-300">
-                    <h3 class="font-bold text-sky-800 text-lg flex items-center"><span class="text-2xl mr-2">🔭</span> Future Watchlist</h3>
-                    <p class="mt-2 text-slate-600">Closely monitor the EU's expansion of DPP requirements to other product categories like textiles, electronics, and construction materials. The architecture built for the battery passport can serve as a template, creating future opportunities to rapidly deploy compliance modules for new markets.</p>
-                </div>
-            </div>
-            <div class="bg-white p-6 md:p-8 rounded-lg shadow-sm border border-slate-200 mt-8">
-                 <h3 class="text-xl font-bold text-slate-800 mb-4 text-center">Actionable Recommendations by Team</h3>
-                 <div class="space-y-6">
-                    <div>
-                        <h4 class="font-bold text-lg text-sky-700">💡 For Product Management</h4>
-                        <ol class="list-decimal list-inside space-y-2 mt-2 text-slate-600">
-                            <li><strong>Prioritize the "Digital Product Passport (DPP) Module":</strong> This is no longer a future trend; it's a live, mandatory requirement. Fast-track the development of an MVP focused on the battery sector to capture the immediate, regulation-driven market demand in the EU.</li>
-                            <li><strong>Develop a Counter-Narrative to "Performance Sustainability":</strong> Work with marketing to define and build features that support a unique and defensible Evreka narrative. This could focus on "Operational Intelligence" or "Circular Supply Chain Integration" to differentiate from AMCS's messaging.</li>
-                            <li><strong>Scope an "International Best Practices" Module:</strong> Based on the Istanbul-Jakarta partnership, scope a product offering that helps municipalities and operators in emerging markets adopt best practices, using the Evreka platform as the digital foundation for their modernization efforts.</li>
-                        </ol>
-                    </div>
-                    <div>
-                        <h4 class="font-bold text-lg text-sky-700">🎯 For Marketing</h4>
-                        <ol class="list-decimal list-inside space-y-2 mt-2 text-slate-600">
-                            <li><strong>Launch a "DPP-Ready" Campaign:</strong> Immediately develop content (webinars, whitepapers, blog posts) explaining the urgency and complexity of the EU's Digital Product Passport. Position Evreka as the essential partner for de-risking EU market access.</li>
-                            <li><strong>Target Roll-Off and Niche Haulers:</strong> Based on Routeware's content marketing, create a competitive campaign targeting roll-off dumpster businesses, highlighting how Evreka's end-to-end platform offers more value than specialized point solutions.</li>
-                            <li><strong>Promote "Performance Sustainability" Case Studies:</strong> Counter the AMCS narrative by developing and aggressively promoting customer case studies that provide concrete data on how Evreka has improved both sustainability metrics AND profitability.</li>
-                        </ol>
-                    </div>
-                    <div>
-                        <h4 class="font-bold text-lg text-sky-700">💬 For Sales</h4>
-                        <ol class="list-decimal list-inside space-y-2 mt-2 text-slate-600">
-                            <li><strong>Utilize the DPP as a Compelling Event:</strong> Train the sales team to use the August 18th enforcement date of the EU Battery Regulation as a powerful trigger to initiate conversations with any company in the battery value chain about their compliance readiness.</li>
-                            <li><strong>Equip the Team to Sell Against "Performance Sustainability":</strong> Provide sales with battle cards that clearly articulate Evreka's differentiated value proposition against the AMCS narrative, focusing on areas where Evreka has a stronger offering.</li>
-                            <li><strong>Prospect for International Modernization Projects:</strong> Monitor news for other international partnerships similar to the Istanbul-Jakarta deal. These represent high-value opportunities to engage with public sector clients who are actively seeking technology solutions.</li>
-                        </ol>
-                    </div>
-                 </div>
-            </div>
-        </section>
-
-        <section id="sources" class="scroll-mt-24 pt-16 space-y-8">
-            <div class="text-center">
-                <h2 class="text-3xl font-bold tracking-tight text-slate-900">Data Sources</h2>
-                <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">The insights in this briefing are synthesized from the following representative news articles, press releases, and research reports published within the last 7 days.</p>
-            </div>
-            <div class="bg-white p-6 md:p-8 rounded-lg shadow-sm border border-slate-200">
-                <div class="space-y-6 text-sm">
-                    <p>1. Circularise, "Digital product passports (DPPs) required by EU legislation..." (Aug 19, 2025)</p>
-                    <p>2. AMCS Group, "AMCS Spring Release 2025" & Webinar Announcements (Aug 19-21, 2025)</p>
-                    <p>3. Antara News, "Jakarta, Istanbul collaborate on waste management" (Aug 23, 2025)</p>
-                    <p>4. Routeware, "What Roll-Off Businesses Gain from Dumpster Rental Software" (Aug 18, 2025)</p>
-                    <p>5. Afvalgids.nl, "Nederlandse afval- en recyclingsector actief op ruim 3.000 locaties" (Aug 19, 2025)</p>
-                    <p>6. Waste Dive, "Driven by EPR, brands to offer film and flexibles funding to California recyclers" (Aug 18, 2025)</p>
-                </div>
-            </div>
-        </section>
-
+            </section>
+        </div>
     </main>
+    
+    <main id="briefing-2025-09-08" class="hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <section id="dashboard" class="scroll-mt-24 space-y-8">
+                <div class="text-center">
+                    <p class="text-base font-semibold text-sky-600">Weekly Intelligence Briefing: September 8, 2025</p>
+                    <h2 class="mt-2 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">The Enterprise Software Battleground</h2>
+                    <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">This week's intelligence signals a clear shift in the competitive landscape towards large enterprise needs, with SAP launching a comprehensive ESG solution that directly targets the corporate sustainability market. Simultaneously, significant capital is flowing into specialized recycling infrastructure, such as Clean Harbors' new solvent recycling plant, creating demand for sophisticated software to manage complex industrial processes. The focus is intensifying on platforms that can handle enterprise-grade compliance, manage hazardous materials, and integrate with existing systems of record.</p>
+                </div>
+                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                        <h3 class="font-bold text-slate-800">1. SAP Enters the ESG Arena</h3>
+                        <p class="mt-2 text-sm text-slate-600">SAP launched its "Sustainability Solution," a comprehensive software package designed to help large enterprises manage and report on their ESG data. This move by a global software giant validates the ESG software market and poses a significant competitive threat.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                        <h3 class="font-bold text-slate-800">2. $40M Invested in Solvent Recycling</h3>
+                        <p class="mt-2 text-sm text-slate-600">Clean Harbors is investing $40 million to build a new solvent recycling plant in Nebraska. This highlights the growing focus on industrial and hazardous waste streams, which require specialized software for tracking, compliance, and process management.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                        <h3 class="font-bold text-slate-800">3. Digital DRS Gains Traction in Scotland</h3>
+                        <p class="mt-2 text-sm text-slate-600">A successful pilot of a digital deposit return scheme (DRS) was completed in Scotland. This shows continued momentum for app-based, digitally-managed DRS, a key software category where competitor Sensoneo has a strong presence.</p>
+                    </div>
+                </div>
+            </section>
+            <section id="competitors" class="scroll-mt-24 pt-16 space-y-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold tracking-tight text-slate-900">Competitive Matrix</h2>
+                     <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">An overview of competitor activities, focusing on direct SaaS players, focus market developments, and significant news from the broader industry watchlist.</p>
+                </div>
+                <div class="flex flex-wrap justify-center gap-4 mb-8" id="competitor-tabs-2025-09-08"></div>
+                <div id="competitor-content-2025-09-08" class="bg-white p-6 md:p-8 rounded-lg shadow-sm border border-slate-200 min-h-[300px]"></div>
+            </section>
+            
+            <section id="strategic-inputs" class="scroll-mt-24 pt-16 space-y-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold tracking-tight text-slate-900">Concluding Strategic Inputs</h2>
+                    <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">The market is bifurcating, demanding both enterprise-grade, generic ESG tools and highly specialized, industry-specific operational platforms.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-green-300">
+                        <h3 class="font-bold text-green-800 text-lg flex items-center"><span class="text-2xl mr-2">💡</span> Top Opportunity</h3>
+                        <p class="mt-2 text-slate-600">The significant investment in specialized industrial recycling (e.g., solvents) creates an immediate need for software that can manage hazardous material tracking, complex chemical inventories, and stringent environmental compliance. This is a high-value niche where generic platforms cannot compete.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-red-300">
+                        <h3 class="font-bold text-red-800 text-lg flex items-center"><span class="text-2xl mr-2">⚠️</span> Top Threat</h3>
+                        <p class="mt-2 text-slate-600">SAP's entry into the ESG market is a major long-term threat. They can leverage their existing enterprise customer base to bundle sustainability reporting, potentially locking Evreka out of high-level corporate purchasing decisions if Evreka is perceived only as an operational tool.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-yellow-300">
+                        <h3 class="font-bold text-yellow-800 text-lg flex items-center"><span class="text-2xl mr-2">⚡</span> Immediate Action Item</h3>
+                        <p class="mt-2 text-slate-600">Task the product and marketing teams to develop a "Hazardous & Industrial Waste" value proposition, highlighting existing features for compliance, tracking, and reporting that cater to this specialized, high-margin sector.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-sky-300">
+                        <h3 class="font-bold text-sky-800 text-lg flex items-center"><span class="text-2xl mr-2">🔭</span> Future Watchlist</h3>
+                        <p class="mt-2 text-slate-600">Closely monitor the adoption of digital DRS technologies. As more regions follow Scotland's lead, the market for app-based return systems will grow, representing a significant potential product line or partnership opportunity.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="recommendations" class="scroll-mt-24 pt-16 space-y-8">
+                 <div class="bg-white p-6 md:p-8 rounded-lg shadow-sm border border-slate-200">
+                     <h3 class="text-xl font-bold text-slate-800 mb-4 text-center">Actionable Recommendations by Team</h3>
+                     <div class="space-y-6">
+                        <div>
+                            <h4 class="font-bold text-lg text-sky-700">📦 For Product Management</h4>
+                            <ul class="list-disc list-inside space-y-2 mt-2 text-slate-600">
+                                <li><strong>Develop an "SAP Integration" Roadmap:</strong> Instead of competing head-on, explore a strategy of becoming the best-in-class operational data provider *for* SAP. A robust, certified integration could be a powerful channel.</li>
+                                <li><strong>Enhance Hazardous Waste Features:</strong> Review and prioritize features specifically for industrial and hazardous waste, such as manifest tracking, safety data sheet (SDS) management, and specialized compliance reporting.</li>
+                                <li><strong>Evaluate a "Digital DRS" MVP:</strong> Begin technical and market evaluation for developing a lightweight, app-based Digital DRS solution to compete with Sensoneo in future tenders.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-sky-700">🎯 For Marketing</h4>
+                             <ul class="list-disc list-inside space-y-2 mt-2 text-slate-600">
+                                <li><strong>Create "Evreka vs. ERP" Content:</strong> Develop marketing materials that clearly explain the difference between a generic ERP sustainability module (like SAP's) and a specialized operational platform like Evreka. Focus on "We make the data your ERP reports on."</li>
+                                <li><strong>Target the Industrial/Chemical Sector:</strong> Launch a targeted campaign at industrial and chemical companies, using the Clean Harbors investment as a news hook to talk about the need for specialized waste management software.</li>
+                                <li><strong>Promote Digital DRS Thought Leadership:</strong> Publish content about the benefits and challenges of Digital DRS to position Evreka as a knowledgeable player in this emerging space, even without a current product.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-sky-700">💬 For Sales</h4>
+                             <ul class="list-disc list-inside space-y-2 mt-2 text-slate-600">
+                                <li><strong>Ask "How do you feed your ESG report?":</strong> When encountering customers considering SAP, pivot the conversation to the source of the data. Position Evreka as the operational engine that generates the accurate, auditable data their corporate ESG platform needs.</li>
+                                <li><strong>Prospect Industrial Recyclers:</strong> Actively target companies in the solvent, chemical, and hazardous waste recycling space. These are high-value clients with complex needs that are currently underserved by generic software.</li>
+                                <li><strong>Monitor DRS Tenders:</strong> Keep a close watch on government and private tenders for Deposit Return Schemes, especially those that mention digital or app-based solutions.</li>
+                            </ul>
+                        </div>
+                     </div>
+                </div>
+            </section>
+            
+            <section id="sources" class="scroll-mt-24 pt-16 space-y-8">
+                <div class="bg-white p-6 md:p-8 rounded-lg shadow-sm border border-slate-200">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 text-center">Data Sources</h3>
+                    <ul class="list-disc list-inside space-y-2 text-slate-600">
+                        <li><a href="https://news.sap.com/2025/09/sap-sustainability-solution-for-esg-reporting/" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:underline">SAP Launches Sustainability Solution</a></li>
+                        <li><a href="https://www.wastedive.com/news/clean-harbors-solvent-recycling-plant-nebraska/762301/" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:underline">Clean Harbors to Build $40M Solvent Recycling Plant</a></li>
+                        <li><a href="https://resource.co/article/scotlands-digital-drs-pilot-hailed-success" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:underline">Scotland's Digital DRS Pilot Hailed a Success</a></li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <main id="briefing-2025-09-01" class="hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+             <section id="dashboard" class="scroll-mt-24 space-y-8">
+                <div class="text-center">
+                    <p class="text-base font-semibold text-sky-600">Weekly Intelligence Briefing: September 1, 2025</p>
+                    <h2 class="mt-2 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Hardware & Data Converge</h2>
+                    <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">This week's intelligence highlights a significant convergence of hardware and software, as major haulers make substantial investments in IoT to digitize their physical assets. Waste Connections' large-scale deployment of Compology's sensors signals a market shift where data-driven operations are becoming the industry standard. This is reinforced by regulatory pressures in the UK pushing for digital waste tracking. For Evreka, this trend validates its core strategy and creates opportunities to position its platform as the central nervous system for this newly digitized infrastructure.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                        <h3 class="font-bold text-slate-800">1. Waste Connections' Major IoT Rollout</h3>
+                        <p class="mt-2 text-sm text-slate-600">Waste Connections has signed a multi-year deal to deploy Compology's camera-based sensors across its roll-off container fleet. This is one of the largest publicly announced IoT hardware deals in the sector, signaling a definitive move by major players to digitize their core assets.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                        <h3 class="font-bold text-slate-800">2. UK Mandates Digital Waste Tracking</h3>
+                        <p class="mt-2 text-sm text-slate-600">The UK government has reaffirmed its commitment to launching a mandatory digital waste tracking service. This regulation will create a legal requirement for software that can manage and report waste movement data, transforming a best practice into a compliance necessity.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                        <h3 class="font-bold text-slate-800">3. Veolia Acquires MRF Operator</h3>
+                        <p class="mt-2 text-sm text-slate-600">Veolia's acquisition of IRSL, a specialist in MRF operations, underscores the trend of vertical integration. Large players are seeking to control the entire waste value chain, from collection to processing, increasing the need for a single, integrated software platform to manage these diverse operations.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="competitors" class="scroll-mt-24 pt-16 space-y-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold tracking-tight text-slate-900">Competitive Matrix</h2>
+                     <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">An overview of competitor activities, focusing on direct SaaS players, focus market developments, and significant news from the broader industry watchlist.</p>
+                </div>
+                
+                <div class="flex flex-wrap justify-center gap-4 mb-8" id="competitor-tabs-2025-09-01"></div>
+                <div id="competitor-content-2025-09-01" class="bg-white p-6 md:p-8 rounded-lg shadow-sm border border-slate-200 min-h-[300px]"></div>
+            </section>
+             <section id="strategic-inputs" class="scroll-mt-24 pt-16 space-y-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold tracking-tight text-slate-900">Concluding Strategic Inputs</h2>
+                    <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">The industry is past the pilot phase; hardware digitization is now a core strategy for major players, creating an urgent need for a unifying software layer.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-green-300">
+                        <h3 class="font-bold text-green-800 text-lg flex items-center"><span class="text-2xl mr-2">💡</span> Top Opportunity</h3>
+                        <p class="mt-2 text-slate-600">Position Evreka as the "hardware-agnostic operating system" for waste. With major haulers now buying hardware at scale, the immediate need is for a software platform that can integrate with any sensor or camera and turn that data into operational and financial value.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-red-300">
+                        <h3 class="font-bold text-red-800 text-lg flex items-center"><span class="text-2xl mr-2">⚠️</span> Top Threat</h3>
+                        <p class="mt-2 text-slate-600">Compology's major deal with Waste Connections gives them a significant foothold and a powerful case study. This could lead to them being perceived as the default hardware/software bundle, making it harder for pure-play software providers to compete for enterprise deals.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-yellow-300">
+                        <h3 class="font-bold text-yellow-800 text-lg flex items-center"><span class="text-2xl mr-2">⚡</span> Immediate Action Item</h3>
+                        <p class="mt-2 text-slate-600">Launch a marketing campaign targeting major haulers with the message: "You've bought the hardware, now unlock its true value." This campaign should highlight Evreka's integration capabilities and advanced analytics, positioning it as the essential next step after an IoT investment.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-sky-300">
+                        <h3 class="font-bold text-sky-800 text-lg flex items-center"><span class="text-2xl mr-2">🔭</span> Future Watchlist</h3>
+                        <p class="mt-2 text-slate-600">Monitor the UK's procurement process for its national digital waste tracking system. Understanding the technical requirements will be key to ensuring Evreka is positioned to be a certified and preferred software provider when the mandate goes live.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="recommendations" class="scroll-mt-24 pt-16 space-y-8">
+                 <div class="bg-white p-6 md:p-8 rounded-lg shadow-sm border border-slate-200">
+                     <h3 class="text-xl font-bold text-slate-800 mb-4 text-center">Actionable Recommendations by Team</h3>
+                     <div class="space-y-6">
+                        <div>
+                            <h4 class="font-bold text-lg text-sky-700">📦 For Product Management</h4>
+                            <ul class="list-disc list-inside space-y-2 mt-2 text-slate-600">
+                                <li><strong>Develop a "Hardware Agnostic" Integration Hub:</strong> The Waste Connections/Compology deal validates the market for IoT. Prioritize the development of a seamless integration hub that makes it easy to connect any third-party hardware (cameras, sensors, etc.) to the Evreka platform. This positions Evreka as the central software layer, regardless of the customer's hardware choices.</li>
+                                <li><strong>Build a "UK Digital Waste Tracking" Compliance Module:</strong> Get ahead of the UK regulation by designing and marketing a specific module that meets all the requirements of the new digital waste tracking service. This can be a powerful wedge to win new business in the UK market.</li>
+                                <li><strong>Enhance MRF Operations Features:</strong> In response to the Veolia/IRSL acquisition, review and enhance the feature set for Material Recovery Facilities (MRFs). As haulers become MRF operators, they will need a single platform that can manage both collection and processing operations seamlessly.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-sky-700">🎯 For Marketing</h4>
+                             <ul class="list-disc list-inside space-y-2 mt-2 text-slate-600">
+                                <li><strong>Launch a "Digitize Your Fleet" Campaign:</strong> Use the Waste Connections deal as a news hook to launch a marketing campaign targeting large haulers. The message should be: "The industry is digitizing. Evreka is the software platform to make sense of your hardware investments."</li>
+                                <li><strong>Create a "UK Compliance" Webinar Series:</strong> Develop and promote a series of webinars focused on helping UK waste companies prepare for the upcoming mandatory digital tracking regulations. Position Evreka as the thought leader and essential partner for this transition.</li>
+                                <li><strong>Develop a "Vertical Integration" Whitepaper:</strong> Target integrated players like Veolia with a whitepaper that explains the benefits of a single software platform for managing the entire waste value chain, from collection logistics to MRF operations and commodity sales.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-sky-700">💬 For Sales</h4>
+                             <ul class="list-disc list-inside space-y-2 mt-2 text-slate-600">
+                                <li><strong>Use the Compology Deal as a Social Proof Point:</strong> In conversations with large haulers, reference the Waste Connections deal as proof that the market leaders are investing heavily in IoT. Ask the question: "What is your strategy for digitizing your assets?"</li>
+                                <li><strong>Lead with Compliance in the UK:</strong> Make the upcoming digital waste tracking mandate the primary conversation starter for all prospects in the UK. The message is one of risk mitigation and future-proofing their business.</li>
+                                <li><strong>Target Companies with Recent MRF Acquisitions:</strong> Actively track M&A news. When a hauler acquires a recycling facility, it creates a perfect trigger event to reach out and discuss the challenges and opportunities of integrating disparate operations onto a single platform.</li>
+                            </ul>
+                        </div>
+                     </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <main id="briefing-2025-08-25" class="hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <section id="dashboard" class="scroll-mt-24 space-y-8">
+                <div class="text-center">
+                    <p class="text-base font-semibold text-sky-600">Weekly Intelligence Briefing: August 25, 2025</p>
+                    <h2 class="mt-2 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">The Digital Passport Era Begins</h2>
+                     <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">This week marks a pivotal shift in the regulatory landscape as the EU's Digital Product Passport (DPP) mandate for batteries officially comes into force, creating an immediate, compliance-driven market for sophisticated data management software. Competitors like AMCS are aggressively shaping the market narrative around "Performance Sustainability," while international partnerships, such as the one between Istanbul and Jakarta, highlight a growing global focus on advanced waste management practices. For Evreka, the imperative is clear: capture the greenfield DPP opportunity, counter competitor narratives with a strong value proposition, and leverage global trends to inform product strategy.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                        <h3 class="font-bold text-slate-800">1. EU Digital Product Passport is Live</h3>
+                        <p class="mt-2 text-sm text-slate-600">As of August 18, the EU Battery Regulation is fully in effect, replacing the old directive. This makes the Digital Product Passport a mandatory requirement, creating an urgent, legally-binding need for software that can manage detailed lifecycle data for products sold in the EU.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                        <h3 class="font-bold text-slate-800">2. AMCS Pushes "Performance Sustainability"</h3>
+                        <p class="mt-2 text-sm text-slate-600">AMCS held multiple webinars this week promoting its "Performance Sustainability" concept. This is a direct competitive move to own the market narrative, linking sustainability software directly to profitability and operational efficiency, raising the bar for how value is communicated to customers.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                        <h3 class="font-bold text-slate-800">3. Global Knowledge-Sharing Accelerates</h3>
+                        <p class="mt-2 text-sm text-slate-600">A new partnership between Istanbul and Jakarta to collaborate on waste management, including landfill operations and carbon credits, signals a growing trend of international cooperation. This indicates an expanding global market for advanced, proven waste-tech solutions and best practices.</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="competitors" class="scroll-mt-24 pt-16 space-y-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold tracking-tight text-slate-900">Competitive Matrix</h2>
+                     <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">An overview of competitor activities, focusing on direct SaaS players, focus market developments, and significant news from the broader industry watchlist.</p>
+                </div>
+                
+                <div class="flex flex-wrap justify-center gap-4 mb-8" id="competitor-tabs-2025-08-25"></div>
+                <div id="competitor-content-2025-08-25" class="bg-white p-6 md:p-8 rounded-lg shadow-sm border border-slate-200 min-h-[300px]"></div>
+            </section>
+            
+            <section id="strategic-inputs-2025-08-25" class="scroll-mt-24 pt-16 space-y-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold tracking-tight text-slate-900">Concluding Strategic Inputs</h2>
+                    <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">This week is defined by the creation of a new, regulation-driven software market (DPP) and aggressive narrative-shaping by key competitors.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-green-300">
+                        <h3 class="font-bold text-green-800 text-lg flex items-center"><span class="text-2xl mr-2">💡</span> Top Opportunity</h3>
+                        <p class="mt-2 text-slate-600">The Digital Product Passport for batteries is a greenfield software market. Evreka can gain a first-mover advantage by rapidly developing and marketing a solution that addresses the immediate compliance needs of battery manufacturers and recyclers selling into the EU.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-red-300">
+                        <h3 class="font-bold text-red-800 text-lg flex items-center"><span class="text-2xl mr-2">⚠️</span> Top Threat</h3>
+                        <p class="mt-2 text-slate-600">AMCS's "Performance Sustainability" marketing campaign is a direct threat to Evreka's market positioning. By linking sustainability to profit, they are attempting to own the value conversation, which could make Evreka's offerings seem purely operational or cost-focused by comparison.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-yellow-300">
+                        <h3 class="font-bold text-yellow-800 text-lg flex items-center"><span class="text-2xl mr-2">⚡</span> Immediate Action Item</h3>
+                        <p class="mt-2 text-slate-600">Launch a targeted "DPP-Ready" marketing campaign to the battery value chain, highlighting the urgency of the new regulation and positioning Evreka as the expert compliance partner.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-sky-300">
+                        <h3 class="font-bold text-sky-800 text-lg flex items-center"><span class="text-2xl mr-2">🔭</span> Future Watchlist</h3>
+                        <p class="mt-2 text-slate-600">Monitor which product category the EU targets next for Digital Product Passports (e.g., textiles, electronics). The playbook developed for batteries can be rapidly adapted for future mandated sectors.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="recommendations-2025-08-25" class="scroll-mt-24 pt-16 space-y-8">
+                 <div class="bg-white p-6 md:p-8 rounded-lg shadow-sm border border-slate-200">
+                     <h3 class="text-xl font-bold text-slate-800 mb-4 text-center">Actionable Recommendations by Team</h3>
+                     <div class="space-y-6">
+                        <div>
+                            <h4 class="font-bold text-lg text-sky-700">📦 For Product Management</h4>
+                            <ul class="list-disc list-inside space-y-2 mt-2 text-slate-600">
+                                <li><strong>Prioritize the "Digital Product Passport (DPP) Module":</strong> This is no longer a future trend; it's a live, mandatory requirement. Fast-track the development of an MVP focused on the battery sector to capture the immediate, regulation-driven market demand in the EU.</li>
+                                <li><strong>Develop a Counter-Narrative to "Performance Sustainability":</strong> Work with marketing to define and build features that support a unique and defensible Evreka narrative. This could focus on "Operational Intelligence" or "Circular Supply Chain Integration" to differentiate from AMCS's messaging.</li>
+                                <li><strong>Scope an "International Best Practices" Module:</strong> Based on the Istanbul-Jakarta partnership, scope a product offering that helps municipalities and operators in emerging markets adopt best practices, using the Evreka platform as the digital foundation for their modernization efforts.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-sky-700">🎯 For Marketing</h4>
+                             <ul class="list-disc list-inside space-y-2 mt-2 text-slate-600">
+                                <li><strong>Launch a "DPP-Ready" Campaign:</strong> Immediately develop content (webinars, whitepapers, blog posts) explaining the urgency and complexity of the EU's Digital Product Passport. Position Evreka as the essential partner for de-risking EU market access.</li>
+                                <li><strong>Target Roll-Off and Niche Haulers:</strong> Based on Routeware's content marketing, create a competitive campaign targeting roll-off dumpster businesses, highlighting how Evreka's end-to-end platform offers more value than specialized point solutions.</li>
+                                <li><strong>Promote "Performance Sustainability" Case Studies:</strong> Counter the AMCS narrative by developing and aggressively promoting customer case studies that provide concrete data on how Evreka has improved both sustainability metrics AND profitability.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-sky-700">💬 For Sales</h4>
+                             <ul class="list-disc list-inside space-y-2 mt-2 text-slate-600">
+                                <li><strong>Utilize the DPP as a Compelling Event:</strong> Train the sales team to use the August 18th enforcement date of the EU Battery Regulation as a powerful trigger to initiate conversations with any company in the battery value chain about their compliance readiness.</li>
+                                <li><strong>Equip the Team to Sell Against "Performance Sustainability":</strong> Provide sales with battle cards that clearly articulate Evreka's differentiated value proposition against the AMCS narrative, focusing on areas where Evreka has a stronger offering.</li>
+                                <li><strong>Prospect for International Modernization Projects:</strong> Monitor news for other international partnerships similar to the Istanbul-Jakarta deal. These represent high-value opportunities to engage with public sector clients who are actively seeking technology solutions.</li>
+                            </ul>
+                        </div>
+                     </div>
+                </div>
+            </section>
+            
+            <section id="sources-2025-08-25" class="scroll-mt-24 pt-16 space-y-8">
+                <div class="bg-white p-6 md:p-8 rounded-lg shadow-sm border border-slate-200">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 text-center">Data Sources</h3>
+                    <ul class="list-disc list-inside space-y-2 text-slate-600">
+                        <li><a href="https://www.circularise.com/blogs/dpps-required-by-eu-legislation-across-sectors" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:underline">Circularise: Digital Product Passports (DPPs) required by EU legislation</a></li>
+                        <li><a href="https://www.amcsgroup.com/solutions/amcs-spring-release-2025/" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:underline">AMCS Spring Release 2025 & Webinars</a></li>
+                        <li><a href="https://en.antaranews.com/news/375077/jakarta-istanbul-collaborate-on-waste-management" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:underline">Antara News: Jakarta, Istanbul collaborate on waste management</a></li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+    </main>
+    
+    <main id="briefing-2025-08-18" class="hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <section id="dashboard" class="scroll-mt-24 space-y-8">
+                <div class="text-center">
+                    <p class="text-base font-semibold text-sky-600">Weekly Intelligence Briefing: August 18, 2025</p>
+                    <h2 class="mt-2 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Regulation Solidifies, SaaS Value Climbs</h2>
+                     <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">This week's intelligence underscores a powerful trend: regulatory action is creating concrete, high-value opportunities for sophisticated SaaS platforms. The UK's new EPR rules for electronics place direct financial responsibility on online marketplaces, while vape sellers are now required to fund take-back schemes. These moves, coupled with the ongoing international plastic treaty negotiations, are transforming sustainability from a corporate goal into a hard-and-fast operational requirement, directly increasing the addressable market for compliance and circular economy software.</p>
+                </div>
+                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                        <h3 class="font-bold text-slate-800">1. UK Mandates Online Marketplace EPR</h3>
+                        <p class="mt-2 text-sm text-slate-600">The UK has enacted new rules requiring online marketplaces (like Amazon) to help cover the costs of recycling waste electricals. This extends producer responsibility directly to the point of sale, creating a need for new data-sharing and financial management systems.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                        <h3 class="font-bold text-slate-800">2. Vape Sellers to Pay for Disposal</h3>
+                        <p class="mt-2 text-sm text-slate-600">In a related move, the UK will now require sellers of disposable vapes to pay for the costs of their collection and recycling. This establishes a new, mandatory take-back scheme that will require significant logistical and data management software to operate.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                        <h3 class="font-bold text-slate-800">3. Plastics Treaty Negotiations Intensify</h3>
+                        <p class="mt-2 text-sm text-slate-600">High-level diplomatic talks continue in Geneva regarding the UN Global Plastics Treaty. The EU is pushing for a lifecycle approach, which would necessitate robust software for tracking plastic from production to disposal and recycling, creating a potential global market for such platforms.</p>
+                    </div>
+                </div>
+            </section>
+            <section id="competitors" class="scroll-mt-24 pt-16 space-y-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold tracking-tight text-slate-900">Competitive Matrix</h2>
+                     <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">An overview of competitor activities, focusing on direct SaaS players, focus market developments, and significant news from the broader industry watchlist.</p>
+                </div>
+                <div class="flex flex-wrap justify-center gap-4 mb-8" id="competitor-tabs-2025-08-18"></div>
+                <div id="competitor-content-2025-08-18" class="bg-white p-6 md:p-8 rounded-lg shadow-sm border border-slate-200 min-h-[300px]"></div>
+            </section>
+            <section id="strategic-inputs" class="scroll-mt-24 pt-16 space-y-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold tracking-tight text-slate-900">Concluding Strategic Inputs</h2>
+                    <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">Regulation is creating new software markets from whole cloth, representing a massive opportunity for agile SaaS providers.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-green-300">
+                        <h3 class="font-bold text-green-800 text-lg flex items-center"><span class="text-2xl mr-2">💡</span> Top Opportunity</h3>
+                        <p class="mt-2 text-slate-600">The new UK EPR rules for WEEE and vapes create two distinct, immediate, and compliance-driven software opportunities. Evreka can be a first-mover in offering modules that manage the financial and logistical complexities of these new mandatory schemes.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-red-300">
+                        <h3 class="font-bold text-red-800 text-lg flex items-center"><span class="text-2xl mr-2">⚠️</span> Top Threat</h3>
+                        <p class="mt-2 text-slate-600">As compliance becomes a primary driver, larger, more established software companies (like AMCS, or even ERPs) may be perceived as "safer" choices for enterprise-level compliance, even if their solutions are less specialized.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-yellow-300">
+                        <h3 class="font-bold text-yellow-800 text-lg flex items-center"><span class="text-2xl mr-2">⚡</span> Immediate Action Item</h3>
+                        <p class="mt-2 text-slate-600">Task the product team with a rapid discovery and scoping exercise for a "UK EPR Compliance Suite," starting with modules for WEEE marketplace reporting and vape take-back management.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-sky-300">
+                        <h3 class="font-bold text-sky-800 text-lg flex items-center"><span class="text-2xl mr-2">🔭</span> Future Watchlist</h3>
+                        <p class="mt-2 text-slate-600">The final text of the Global Plastics Treaty. If it includes mandatory lifecycle tracking, it will create a massive, global market for the kind of data management platforms Evreka provides.</p>
+                    </div>
+                </div>
+            </section>
+             <section id="recommendations" class="scroll-mt-24 pt-16 space-y-8">
+                 <div class="bg-white p-6 md:p-8 rounded-lg shadow-sm border border-slate-200">
+                     <h3 class="text-xl font-bold text-slate-800 mb-4 text-center">Actionable Recommendations by Team</h3>
+                     <div class="space-y-6">
+                        <div>
+                            <h4 class="font-bold text-lg text-sky-700">📦 For Product Management</h4>
+                            <ul class="list-disc list-inside space-y-2 mt-2 text-slate-600">
+                                <li><strong>Scope a "WEEE Marketplace EPR" Module:</strong> Begin designing a feature set that allows online marketplaces to track sales, calculate fees, and report to UK producer responsibility organizations.</li>
+                                <li><strong>Design a "Vape Take-Back" Logistics Module:</strong> Start discovery on a solution for managing the collection, transportation, and recycling of vapes, a new and complex waste stream.</li>
+                                <li><strong>Align with Plastics Treaty Standards:</strong> Assign a product owner to monitor the plastics treaty negotiations and ensure Evreka's data architecture is aligned with potential future global standards.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-sky-700">🎯 For Marketing</h4>
+                             <ul class="list-disc list-inside space-y-2 mt-2 text-slate-600">
+                                <li><strong>Launch a "UK EPR Compliance" Campaign:</strong> Create targeted content (webinars, guides) for UK online retailers and vape sellers, explaining the new regulations and positioning Evreka as the solution.</li>
+                                <li><strong>Develop "First Mover" Messaging:</strong> Emphasize Evreka's agility and ability to respond quickly to new regulations, contrasting with slower, larger competitors.</li>
+                                <li><strong>Publish a "Guide to the Global Plastics Treaty":</strong> Create a thought leadership piece that explains the implications of the treaty for businesses, establishing Evreka as a knowledgeable industry leader.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-sky-700">💬 For Sales</h4>
+                             <ul class="list-disc list-inside space-y-2 mt-2 text-slate-600">
+                                <li><strong>Create Target Lists of UK Marketplaces & Vape Retailers:</strong> Immediately begin prospecting these newly-regulated companies. They have a burning need for a solution.</li>
+                                <li><strong>Lead with Compliance:</strong> In all UK sales conversations, lead with the new EPR regulations. Ask prospects, "What is your plan to comply with the new WEEE/vape rules?"</li>
+                                <li><strong>Use the Plastics Treaty to Talk Strategy:</strong> In conversations with large, multinational clients, use the treaty negotiations as a way to discuss their long-term global sustainability and data management strategy.</li>
+                            </ul>
+                        </div>
+                     </div>
+                </div>
+            </section>
+            <section id="sources" class="scroll-mt-24 pt-16 space-y-8">
+                <div class="bg-white p-6 md:p-8 rounded-lg shadow-sm border border-slate-200">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 text-center">Data Sources</h3>
+                    <ul class="list-disc list-inside space-y-2 text-slate-600">
+                        <li><a href="https://www.gov.uk/government/news/uk-businesses-to-benefit-as-online-platforms-pay-their-fair-share-to-recycle-electrical-waste" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:underline">GOV.UK: UK businesses to benefit as online platforms pay their fair share to recycle electrical waste</a></li>
+                        <li><a href="https://www.theguardian.com/environment/waste" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:underline">The Guardian: Vape sellers to pay disposal costs under plans to end UK's 'throwaway culture'</a></li>
+                        <li><a href="https://afvalonline.nl/nieuws/43860/aartsen-naar-geneve-voor-plastictop" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:underline">AfvalOnline: Aartsen naar Genève voor plastictop</a></li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+    </main>
+    
+    <main id="briefing-2025-08-11" class="hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <section id="dashboard" class="scroll-mt-24 space-y-8">
+                <div class="text-center">
+                    <p class="text-base font-semibold text-sky-600">Weekly Intelligence Briefing: August 11, 2025</p>
+                    <h2 class="mt-2 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">AI & Automation Become Table Stakes</h2>
+                     <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">This week's intelligence reveals a clear acceleration in the adoption of AI and automation across the waste and recycling value chain. GFL's deployment of AI-powered camera systems in their trucks to monitor contamination is a landmark move by a major hauler, signaling that data-driven quality control is now a core operational priority. This is complemented by significant investments in automated sorting infrastructure, like BHS's new 100-ton-per-hour MRF. The market is rapidly maturing, and software platforms that can integrate with and add value to these new automated systems are becoming essential.</p>
+                </div>
+                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                        <h3 class="font-bold text-slate-800">1. GFL Deploys In-Cab AI Cameras</h3>
+                        <p class="mt-2 text-sm text-slate-600">GFL Environmental is equipping its collection fleet in several Canadian cities with AI-powered cameras from Prairie Robotics. The system identifies contaminants in recycling bins in real-time, providing immediate feedback to residents and valuable data to the hauler.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                        <h3 class="font-bold text-slate-800">2. BHS to Build Massive Automated MRF</h3>
+                        <p class="mt-2 text-sm text-slate-600">Bulk Handling Systems (BHS) has been contracted to design a new 100-ton-per-hour Material Recovery Facility (MRF) in California. The facility will feature advanced optical sorters and robotics, underscoring the industry's heavy investment in automated processing.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                        <h3 class="font-bold text-slate-800">3. Investment Firm Acquires CP Group</h3>
+                        <p class="mt-2 text-sm text-slate-600">CP Group, a major manufacturer of sorting systems for MRFs, has received a majority investment from Declaration Partners. This injection of private equity capital is intended to drive R&D and expansion, signaling strong investor confidence in the future of automated recycling technology.</p>
+                    </div>
+                </div>
+            </section>
+            <section id="competitors" class="scroll-mt-24 pt-16 space-y-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold tracking-tight text-slate-900">Competitive Matrix</h2>
+                     <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">An overview of competitor activities, focusing on direct SaaS players, focus market developments, and significant news from the broader industry watchlist.</p>
+                </div>
+                <div class="flex flex-wrap justify-center gap-4 mb-8" id="competitor-tabs-2025-08-11"></div>
+                <div id="competitor-content-2025-08-11" class="bg-white p-6 md:p-8 rounded-lg shadow-sm border border-slate-200 min-h-[300px]"></div>
+            </section>
+            <section id="strategic-inputs" class="scroll-mt-24 pt-16 space-y-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold tracking-tight text-slate-900">Concluding Strategic Inputs</h2>
+                    <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">The physical world of waste is becoming digitized and automated, creating an urgent need for a software "operating system" to manage it all.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-green-300">
+                        <h3 class="font-bold text-green-800 text-lg flex items-center"><span class="text-2xl mr-2">💡</span> Top Opportunity</h3>
+                        <p class="mt-2 text-slate-600">Position Evreka as the essential integration and intelligence layer that connects all the new hardware (AI cameras, robotics, sensors) and turns that data into actionable insights for the entire operation, from collection to processing.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-red-300">
+                        <h3 class="font-bold text-red-800 text-lg flex items-center"><span class="text-2xl mr-2">⚠️</span> Top Threat</h3>
+                        <p class="mt-2 text-slate-600">Hardware providers (like Prairie Robotics or BHS) could begin to bundle their own proprietary, lightweight software with their equipment, potentially creating a "good enough" solution that locks out more comprehensive platforms like Evreka.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-yellow-300">
+                        <h3 class="font-bold text-yellow-800 text-lg flex items-center"><span class="text-2xl mr-2">⚡</span> Immediate Action Item</h3>
+                        <p class="mt-2 text-slate-600">Develop a strong partner/integration marketing story. Create content that shows how Evreka enhances, rather than just connects to, third-party hardware, highlighting the value of a single, unified data platform.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-sky-300">
+                        <h3 class="font-bold text-sky-800 text-lg flex items-center"><span class="text-2xl mr-2">🔭</span> Future Watchlist</h3>
+                        <p class="mt-2 text-slate-600">M&A activity where hardware companies acquire software companies (or vice versa) to create vertically integrated, bundled offerings that could be more difficult to compete with.</p>
+                    </div>
+                </div>
+            </section>
+             <section id="recommendations" class="scroll-mt-24 pt-16 space-y-8">
+                 <div class="bg-white p-6 md:p-8 rounded-lg shadow-sm border border-slate-200">
+                     <h3 class="text-xl font-bold text-slate-800 mb-4 text-center">Actionable Recommendations by Team</h3>
+                     <div class="space-y-6">
+                        <div>
+                            <h4 class="font-bold text-lg text-sky-700">📦 For Product Management</h4>
+                            <ul class="list-disc list-inside space-y-2 mt-2 text-slate-600">
+                                <li><strong>Prioritize the Integration Marketplace:</strong> Accelerate development of robust, easy-to-use APIs and an "app store" for third-party hardware integrations. Make it incredibly simple to connect devices to Evreka.</li>
+                                <li><strong>Enhance Contamination Management Features:</strong> Based on the GFL news, enhance the platform's ability to ingest contamination data from sources like AI cameras, link it to specific addresses, and automate communications or charges to customers.</li>
+                                <li><strong>Develop Advanced MRF Analytics:</strong> Create dashboards and reports specifically for automated MRFs that can track the performance of optical sorters and robotics, tying equipment performance to financial outcomes.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-sky-700">🎯 For Marketing</h4>
+                             <ul class="list-disc list-inside space-y-2 mt-2 text-slate-600">
+                                <li><strong>Launch a "Maximize Your Hardware ROI" Campaign:</strong> Target companies that have recently announced major hardware investments. The message should be: "Your new hardware is smart, but Evreka makes your entire operation intelligent."</li>
+                                <li><strong>Create a "The AI-Powered Hauler" Whitepaper:</strong> Use the GFL deployment as a news hook to create a thought leadership piece on how to build a data-driven waste collection operation.</li>
+                                <li><strong>Partner with Hardware Vendors:</strong> Initiate co-marketing conversations with non-competitive hardware vendors (e.g., sensor manufacturers, camera providers) to create joint value propositions.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-sky-700">💬 For Sales</h4>
+                             <ul class="list-disc list-inside space-y-2 mt-2 text-slate-600">
+                                <li><strong>Ask About the "Data Strategy":</strong> In every sales call, ask prospects about their hardware and automation roadmap. Pivot the conversation to their *data strategy* for that hardware, positioning Evreka as the solution.</li>
+                                <li><strong>Target Companies with Aging MRFs:</strong> Companies with older facilities are the prime candidates for the kind of upgrades BHS is building. Prospect these companies and talk to them about the software they'll need to manage a modern, automated facility.</li>
+                                <li><strong>Leverage the Contamination Issue:</strong> Use the GFL story as a conversation starter about the high cost of contamination. Ask prospects how they are currently measuring and managing it, then introduce Evreka's solutions.</li>
+                            </ul>
+                        </div>
+                     </div>
+                </div>
+            </section>
+             <section id="sources" class="scroll-mt-24 pt-16 space-y-8">
+                <div class="bg-white p-6 md:p-8 rounded-lg shadow-sm border border-slate-200">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 text-center">Data Sources</h3>
+                    <ul class="list-disc list-inside space-y-2 text-slate-600">
+                        <li><a href="https://www.wastedive.com/" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:underline">Waste Dive: GFL to deploy Prairie Robotics AI camera tech in 4 Canadian cities</a></li>
+                        <li><a href="https://www.recyclingtoday.com/" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:underline">Recycling Today: BHS to design 100tph material recovery facility in Sunnyvale, California</a></li>
+                        <li><a href="https://www.recyclingproductnews.com/" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:underline">Recycling Product News: CP Group secures majority investment from Declaration Partners</a></li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <main id="briefing-2025-08-04" class="hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <section id="dashboard" class="scroll-mt-24 space-y-8">
+                <div class="text-center">
+                    <p class="text-base font-semibold text-sky-600">Weekly Intelligence Briefing: August 4, 2025</p>
+                    <h2 class="mt-2 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Specialized Recycling Gains Momentum</h2>
+                     <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">This week's intelligence highlights a strong and growing focus on specialized, high-value recycling streams. The opening of the first commercial-scale "black mass" recycling plant in the US marks a significant milestone in the battery circular economy. This is complemented by major investments in medical plastics recycling and new technologies for IT asset disposition (ITAD). The market is clearly segmenting, creating demand for software platforms that can handle the unique logistical, compliance, and financial tracking requirements of these complex, non-traditional waste streams.</p>
+                </div>
+                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                        <h3 class="font-bold text-slate-800">1. First US Black Mass Plant Opens</h3>
+                        <p class="mt-2 text-sm text-slate-600">Cirba Solutions, in partnership with 6K Energy, has opened the first commercial-scale plant in the US to produce critical battery materials from "black mass" (shredded end-of-life batteries). This is a major step in domesticating the battery supply chain.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                        <h3 class="font-bold text-slate-800">2. Medical Plastics Recycling Scales Up</h3>
+                        <p class="mt-2 text-sm text-slate-600">A partnership between Brightmark and Lewis Salvage has successfully recycled over 1 million pounds of medical plastics. This demonstrates a viable model for a challenging, high-purity waste stream that requires rigorous tracking and quality control.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                        <h3 class="font-bold text-slate-800">3. AI-Powered E-Waste Processing</h3>
+                        <p class="mt-2 text-sm text-slate-600">Techbros launched a new ITAD and e-waste processing facility that integrates AI into its operations. This signals a move towards more sophisticated, data-driven approaches in the high-value electronics recycling sector.</p>
+                    </div>
+                </div>
+            </section>
+            <section id="competitors" class="scroll-mt-24 pt-16 space-y-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold tracking-tight text-slate-900">Competitive Matrix</h2>
+                     <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">An overview of competitor activities, focusing on direct SaaS players, focus market developments, and significant news from the broader industry watchlist.</p>
+                </div>
+                <div class="flex flex-wrap justify-center gap-4 mb-8" id="competitor-tabs-2025-08-04"></div>
+                <div id="competitor-content-2025-08-04" class="bg-white p-6 md:p-8 rounded-lg shadow-sm border border-slate-200 min-h-[300px]"></div>
+            </section>
+            <section id="strategic-inputs" class="scroll-mt-24 pt-16 space-y-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold tracking-tight text-slate-900">Concluding Strategic Inputs</h2>
+                    <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">The waste industry is rapidly segmenting into high-value, specialized verticals, each with unique software requirements.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-green-300">
+                        <h3 class="font-bold text-green-800 text-lg flex items-center"><span class="text-2xl mr-2">💡</span> Top Opportunity</h3>
+                        <p class="mt-2 text-slate-600">Become the leading software provider for the emerging battery recycling industry. This sector has complex needs (hazardous material tracking, regulatory compliance, multi-stage processing) and is currently underserved by generic waste software.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-red-300">
+                        <h3 class="font-bold text-red-800 text-lg flex items-center"><span class="text-2xl mr-2">⚠️</span> Top Threat</h3>
+                        <p class="mt-2 text-slate-600">New, specialized competitors could emerge that focus exclusively on one of these high-value niches (e.g., a "battery recycling OS"). These focused players could build deeper, more specific features, making it hard for a general platform to compete in that vertical.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-yellow-300">
+                        <h3 class="font-bold text-yellow-800 text-lg flex items-center"><span class="text-2xl mr-2">⚡</span> Immediate Action Item</h3>
+                        <p class="mt-2 text-slate-600">Task the product team with a discovery sprint to define the MVP for a "Battery Lifecycle Management" module, focusing on the specific needs of black mass processors like Cirba Solutions.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-sky-300">
+                        <h3 class="font-bold text-sky-800 text-lg flex items-center"><span class="text-2xl mr-2">🔭</span> Future Watchlist</h3>
+                        <p class="mt-2 text-slate-600">The development of regulations for other complex waste streams, such as solar panels and wind turbine blades. Each new regulation will create a new potential market for specialized compliance and logistics software.</p>
+                    </div>
+                </div>
+            </section>
+             <section id="recommendations" class="scroll-mt-24 pt-16 space-y-8">
+                 <div class="bg-white p-6 md:p-8 rounded-lg shadow-sm border border-slate-200">
+                     <h3 class="text-xl font-bold text-slate-800 mb-4 text-center">Actionable Recommendations by Team</h3>
+                     <div class="space-y-6">
+                        <div>
+                            <h4 class="font-bold text-lg text-sky-700">📦 For Product Management</h4>
+                            <ul class="list-disc list-inside space-y-2 mt-2 text-slate-600">
+                                <li><strong>Scope a "Battery Lifecycle Management" Module:</strong> Define the core features needed to manage the collection, transport, and processing of end-of-life batteries and black mass.</li>
+                                <li><strong>Investigate Medical Waste Compliance Features:</strong> Research the specific chain-of-custody and compliance requirements for medical plastics recycling to assess the viability of a dedicated module.</li>
+                                <li><strong>Enhance E-waste/ITAD Capabilities:</strong> Review existing e-waste features and prioritize enhancements related to AI-driven grading, data destruction certification, and component harvesting.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-sky-700">🎯 For Marketing</h4>
+                             <ul class="list-disc list-inside space-y-2 mt-2 text-slate-600">
+                                <li><strong>Develop a "Battery Circular Economy" Campaign:</strong> Create content specifically for the battery recycling industry, highlighting how Evreka can help them manage this complex and regulated new market.</li>
+                                <li><strong>Showcase "Specialized Recycling" Expertise:</strong> Create case studies or whitepapers on how the Evreka platform can be configured to handle any complex waste stream, using medical plastics or e-waste as examples.</li>
+                                <li><strong>Target Industry-Specific Keywords:</strong> Launch SEO and SEM campaigns targeting keywords like "black mass logistics software," "medical plastics tracking," and "AI-powered ITAD software."</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-sky-700">💬 For Sales</h4>
+                             <ul class="list-disc list-inside space-y-2 mt-2 text-slate-600">
+                                <li><strong>Prospect the Battery Value Chain:</strong> Target not just recyclers like Cirba, but also EV manufacturers, and battery producers who are now responsible for the end-of-life management of their products.</li>
+                                <li><strong>Engage with Medical Waste Haulers:</strong> Use the Brightmark success story as a reason to call medical waste companies and ask about their strategy for recycling, not just disposal.</li>
+                                <li><strong>Ask E-waste Recyclers about AI:</strong> Contact ITAD and e-waste companies and ask how they are using data and AI to improve their sorting and valuation processes.</li>
+                            </ul>
+                        </div>
+                     </div>
+                </div>
+            </section>
+             <section id="sources" class="scroll-mt-24 pt-16 space-y-8">
+                <div class="bg-white p-6 md:p-8 rounded-lg shadow-sm border border-slate-200">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 text-center">Data Sources</h3>
+                    <ul class="list-disc list-inside space-y-2 text-slate-600">
+                        <li><a href="https://www.recyclingtoday.com/" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:underline">Recycling Today: First commercial advanced black mass recycling plant in U.S. opens</a></li>
+                        <li><a href="https://www.recyclingtoday.com/" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:underline">Recycling Today: Brightmark and Lewis Salvage partnership surpasses 1 million pounds of medical plastics recycled</a></li>
+                        <li><a href="https://www.recyclingtoday.com/" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:underline">Recycling Today: Techbros launches AI-integrated ITAD and e-waste processing facility</a></li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+    </main>
+    
+    <main id="briefing-2025-07-28" class="hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <section id="dashboard" class="scroll-mt-24 space-y-8">
+                <div class="text-center">
+                    <p class="text-base font-semibold text-sky-600">Weekly Intelligence Briefing: July 28, 2025</p>
+                    <h2 class="mt-2 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Consolidation and Digitalization Accelerate</h2>
+                     <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">This week’s intelligence highlights two powerful, converging forces shaping the waste industry: aggressive market consolidation by major players and the increasing adoption of digital tools for operational efficiency. Casella's significant M&A spending and GFL's strategic sale of non-core assets demonstrate a clear focus on strengthening core business lines. Simultaneously, the launch of new software features by competitors like Routeware underscores the ongoing digital transformation of the sector. The key takeaway is the growing need for integrated, enterprise-grade platforms that can support these larger, more sophisticated, and digitally-mature organizations.</p>
+                </div>
+                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                        <h3 class="font-bold text-slate-800">1. Casella Leads in M&A Spending</h3>
+                        <p class="mt-2 text-sm text-slate-600">Casella Waste Systems has spent $165 million on acquisitions so far in 2025, signaling a strong focus on growth through consolidation. This level of activity creates opportunities as newly acquired companies are often required to adopt the parent company's software systems.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                        <h3 class="font-bold text-slate-800">2. Routeware Launches New Features</h3>
+                        <p class="mt-2 text-sm text-slate-600">Routeware announced its Summer 2025 release, which includes new features for billing, customer service, and route optimization. This demonstrates a continued focus on core operational software, a key competitive battleground.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                        <h3 class="font-bold text-slate-800">3. GFL Sells Colorado Assets for $110M</h3>
+                        <p class="mt-2 text-sm text-slate-600">GFL Environmental sold its solid waste operations in Colorado and New Mexico to a private equity-backed operator. This move to divest non-core assets allows GFL to focus on its key markets and represents a major system changeover opportunity with the new owner.</p>
+                    </div>
+                </div>
+            </section>
+            <section id="competitors" class="scroll-mt-24 pt-16 space-y-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold tracking-tight text-slate-900">Competitive Matrix</h2>
+                     <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">An overview of competitor activities, focusing on direct SaaS players, focus market developments, and significant news from the broader industry watchlist.</p>
+                </div>
+                <div class="flex flex-wrap justify-center gap-4 mb-8" id="competitor-tabs-2025-07-28"></div>
+                <div id="competitor-content-2025-07-28" class="bg-white p-6 md:p-8 rounded-lg shadow-sm border border-slate-200 min-h-[300px]"></div>
+            </section>
+            <section id="strategic-inputs" class="scroll-mt-24 pt-16 space-y-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold tracking-tight text-slate-900">Concluding Strategic Inputs</h2>
+                    <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600">M&A activity is the single most powerful driver this week, creating clear, actionable opportunities for software sales.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-green-300">
+                        <h3 class="font-bold text-green-800 text-lg flex items-center"><span class="text-2xl mr-2">💡</span> Top Opportunity</h3>
+                        <p class="mt-2 text-slate-600">The creation of Peak Waste Solutions from the GFL asset sale is a major greenfield opportunity. This new, private-equity-backed entity will need to build its entire technology stack from the ground up, making them an ideal target for the full Evreka platform.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-red-300">
+                        <h3 class="font-bold text-red-800 text-lg flex items-center"><span class="text-2xl mr-2">⚠️</span> Top Threat</h3>
+                        <p class="mt-2 text-slate-600">Routeware's continued focus on core operational features could strengthen their position with the small-to-medium haulers that make up the bulk of Casella's acquisition targets. This could make it harder to displace them in a post-acquisition scenario.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-yellow-300">
+                        <h3 class="font-bold text-yellow-800 text-lg flex items-center"><span class="text-2xl mr-2">⚡</span> Immediate Action Item</h3>
+                        <p class="mt-2 text-slate-600">Create a dedicated sales "M&A Strike Team" to immediately identify and engage with the key decision-makers at Peak Waste Solutions and at the companies recently acquired by Casella.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-sky-300">
+                        <h3 class="font-bold text-sky-800 text-lg flex items-center"><span class="text-2xl mr-2">🔭</span> Future Watchlist</h3>
+                        <p class="mt-2 text-slate-600">Further divestitures of non-core assets by other major haulers (WM, Republic) as they continue to optimize their portfolios. Each divestiture creates a new, independent company that needs a full software suite.</p>
+                    </div>
+                </div>
+            </section>
+             <section id="recommendations" class="scroll-mt-24 pt-16 space-y-8">
+                 <div class="bg-white p-6 md:p-8 rounded-lg shadow-sm border border-slate-200">
+                     <h3 class="text-xl font-bold text-slate-800 mb-4 text-center">Actionable Recommendations by Team</h3>
+                     <div class="space-y-6">
+                        <div>
+                            <h4 class="font-bold text-lg text-sky-700">📦 For Product Management</h4>
+                            <ul class="list-disc list-inside space-y-2 mt-2 text-slate-600">
+                                <li><strong>Develop a "Rapid Onboarding & Data Migration" Toolkit:</strong> Create a streamlined process to help newly acquired or formed companies quickly migrate their data and go live on the Evreka platform. This can be a key competitive differentiator.</li>
+                                <li><strong>Ensure Core Feature Competitiveness:</strong> Benchmark Evreka's core billing, CRM, and routing features against Routeware's latest release to ensure there are no significant gaps that could be a barrier in sales conversations.</li>
+                                <li><strong>Build an "M&A Integration" Module:</strong> Scope a feature set designed to help parent companies manage the integration of a newly acquired hauler, with consolidated reporting and analytics.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-sky-700">🎯 For Marketing</h4>
+                             <ul class="list-disc list-inside space-y-2 mt-2 text-slate-600">
+                                <li><strong>Create an "M&A Tech Playbook" Whitepaper:</strong> Develop a guide for waste companies on how to successfully manage the technology integration process after an acquisition. Position Evreka as the ideal platform for standardization.</li>
+                                <li><strong>Launch an ABM Campaign Targeting Casella's Acquisitions:</strong> Create a highly targeted Account-Based Marketing campaign aimed at the leadership of the companies recently acquired by Casella.</li>
+                                <li><strong>Promote "Platform Advantage" vs. Point Solutions:</strong> Develop messaging that highlights the benefits of Evreka's all-in-one platform over competitors like Routeware, especially for companies looking to grow and scale.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-sky-700">💬 For Sales</h4>
+                             <ul class="list-disc list-inside space-y-2 mt-2 text-slate-600">
+                                <li><strong>Immediately Contact Peak Waste Solutions:</strong> This is the highest priority lead of the week. They need a full tech stack and are backed by private equity, meaning they have the budget to invest.</li>
+                                <li><strong>Monitor M&A Announcements Weekly:</strong> Create a process to track all acquisition announcements in the industry and contact the acquired companies within 48 hours.</li>
+                                <li><strong>Use M&A as a Reason to Call:</strong> Contact existing prospects and ask them about their own M&A strategy (are they looking to buy or sell?). Use this to start a conversation about the importance of having a scalable, modern software platform.</li>
+                            </ul>
+                        </div>
+                     </div>
+                </div>
+            </section>
+             <section id="sources" class="scroll-mt-24 pt-16 space-y-8">
+                <div class="bg-white p-6 md:p-8 rounded-lg shadow-sm border border-slate-200">
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 text-center">Data Sources</h3>
+                    <ul class="list-disc list-inside space-y-2 text-slate-600">
+                        <li><a href="https://www.wastedive.com/" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:underline">Waste Dive: Casella has spent $165M on 8 acquisitions in 2025</a></li>
+                        <li><a href="https://routeware.com/blog/" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:underline">Routeware Blog: Announcing the Routeware Summer 2025 Release</a></li>
+                        <li><a href="https://www.wastedive.com/" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:underline">Waste Dive: GFL sells Colorado, New Mexico assets for $110M</a></li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+    </main>
+
 <script>
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- Data Store ---
     const competitorData = {
-        'Direct SaaS Competitors': {
-            title: 'Direct SaaS Competitors Update',
-            content: `
-                <h5 class="font-semibold text-slate-700 mb-2">Detailed Analysis:</h5>
-                <ul class="list-disc pl-5 space-y-3 text-slate-600">
+        '2025-09-15': {
+             'Direct SaaS Competitors': {
+                title: 'Direct SaaS Competitors Update',
+                content: `<h5 class="font-semibold text-slate-700 mb-2">Detailed Analysis:</h5>
+                    <ul class="list-disc pl-5 space-y-3 text-slate-600">
+                        <li><strong>Sensoneo:</strong> Announced the successful implementation of its smart waste solution for industrial waste management at a Gorenje (Hisense) production plant in Velenje, Slovenia. The project involved their Route Planning software and industrial sensors, and they are publicly claiming a 30% reduction in waste collection costs and a 60% reduction in vehicle travel.</li>
+                         <li><strong>AMCS, Routeware, Compology, Rubicon, Waste Logics:</strong> No major announcements or news were released in the last 7 days.</li>
+                    </ul>`,
+                takeaway: `Sensoneo's Gorenje case study is a significant competitive asset. The specific '30% cost reduction' claim provides a powerful, quantifiable ROI that will resonate with potential customers and will likely be used as a benchmark in sales conversations across the industry. Evreka needs to be prepared to counter this with its own strong, data-backed case studies.`
+            },
+             'Focus Markets': {
+                title: 'Focus Markets Update (NL, UK, TR, IE)',
+                content: `<h5 class="font-semibold text-slate-700 mb-2">Detailed Analysis:</h5>
+                    <ul class="list-disc pl-5 space-y-3 text-slate-600">
+                        <li><strong>Ireland:</strong> The Environmental Protection Agency (EPA) is launching a "Circular Construction" conference on September 16th. This high-profile event signals a strong governmental and regulatory focus on reducing waste in the construction and demolition (C&D) sector, a key vertical for Evreka.</li>
+                        <li><strong>Netherlands, United Kingdom, Turkey:</strong> No major, specific news items concerning waste management SaaS or major local players were identified in the monitored sources from the past 7 days.</li>
+                    </ul>`,
+                takeaway: `The EPA's focus on C&D waste in Ireland creates a perfect opportunity for Evreka to align its marketing and sales efforts. Engaging with this conference and tailoring content to the specific challenges of the Irish C&D sector can position Evreka as the leading solution provider in this growing market segment.`
+            },
+             'Broad Competitor Scan': {
+                title: 'Broad Competitor Scan (Full List)',
+                content: `<h5 class="font-semibold text-slate-700 mb-2">Detailed Analysis:</h5>
+                    <ul class="list-disc pl-5 space-y-3 text-slate-600">
+                        <li>No major, market-moving announcements (e.g., funding rounds, acquisitions, significant product launches) were identified for any companies on the broader watchlist this week.</li>
+                    </ul>`,
+                takeaway: `The lack of major news from the broader market keeps the focus on the strategic moves of key direct competitors and the evolving regulatory landscape. The primary competitive signals remain concentrated among the larger SaaS players.`
+            },
+        },
+        '2025-09-08': {
+             'Direct SaaS Competitors': {
+                title: 'Direct SaaS Competitors Update',
+                content: `<h5 class="font-semibold text-slate-700 mb-2">Detailed Analysis:</h5>
+                    <ul class="list-disc pl-5 space-y-3 text-slate-600">
+                        <li><strong>SAP:</strong> Launched the "SAP Sustainability Solution," a new, comprehensive portfolio of software designed to help enterprises with ESG transparency, reporting, and strategy. This is a major move by an enterprise software giant to capture the corporate sustainability market.</li>
+                        <li><strong>Sensoneo:</strong> While no direct company news, a successful pilot of a digital DRS (Deposit Return Scheme) was completed in Scotland, a technology area where Sensoneo is a recognized market leader.</li>
+                         <li><strong>AMCS, Routeware, Compology, Rubicon, Waste Logics:</strong> No major announcements or news were released in the last 7 days.</li>
+                    </ul>`,
+                takeaway: `SAP's entry into the ESG software space is a significant long-term threat. They have deep relationships with the world's largest companies and can bundle ESG solutions with their core ERP offerings. Evreka must differentiate by focusing on its deep, industry-specific operational expertise, which a generalist provider like SAP cannot match. The successful digital DRS pilot reinforces the market momentum for this technology.`
+            },
+             'Focus Markets': {
+                title: 'Focus Markets Update (NL, UK, TR, IE)',
+                content: `<h5 class="font-semibold text-slate-700 mb-2">Detailed Analysis:</h5>
+                    <ul class="list-disc pl-5 space-y-3 text-slate-600">
+                         <li><strong>United Kingdom:</strong> The successful digital DRS pilot on the Scottish island of Orkney provides a proof-of-concept for app-based returns, which could influence the design of future DRS schemes across the UK.</li>
+                         <li><strong>Netherlands, Turkey, Ireland:</strong> No major, specific news items concerning waste management SaaS or major local players were identified in the monitored sources from the past 7 days.</li>
+                    </ul>`,
+                takeaway: `The validation of digital DRS in the UK presents an opportunity for Evreka to develop or partner on a competing solution to Sensoneo's. As DRS schemes become more common, having a robust software offering will be critical for engaging with both private and public sector clients.`
+            },
+             'Broad Competitor Scan': {
+                title: 'Broad Competitor Scan (Full List)',
+                content: `<h5 class="font-semibold text-slate-700 mb-2">Detailed Analysis:</h5>
+                    <ul class="list-disc pl-5 space-y-3 text-slate-600">
+                        <li><strong>Clean Harbors:</strong> Announced a $40 million investment to build a new solvent recycling facility in Nebraska. This significant capital expenditure highlights the growing market for specialized industrial and hazardous waste recycling.</li>
+                        <li>No other major, market-moving announcements were identified for any companies on the broader watchlist this week.</li>
+                    </ul>`,
+                takeaway: `Large investments in specialized recycling infrastructure, like the Clean Harbors facility, create a direct need for sophisticated management software. These plants require software for inbound material tracking, process control, inventory management of recycled outputs, and compliance reporting for hazardous materials. This represents a high-value market segment for Evreka's platform.`
+            },
+        },
+        '2025-09-01': {
+            'Direct SaaS Competitors': {
+                title: 'Direct SaaS Competitors Update',
+                content: `<h5 class="font-semibold text-slate-700 mb-2">Detailed Analysis:</h5><ul class="list-disc pl-5 space-y-3 text-slate-600">
+                    <li><strong>Compology:</strong> Announced a significant, multi-year agreement to provide their camera-based container monitoring systems for Waste Connections' roll-off dumpster fleet. This is a major win that validates their hardware and data platform at the highest level of the industry.</li>
+                    <li><strong>AMCS Group:</strong> No major product announcements, but their recent webinars on "Performance Sustainability" continue to be promoted, indicating a sustained marketing effort to own this narrative.</li>
+                    <li><strong>Routeware, Sensoneo, Rubicon, Waste Logics:</strong> No major announcements or news were released in the last 7 days.</li>
+                </ul>`,
+                takeaway: `The Compology/Waste Connections deal is a market-defining event. It proves that major haulers are willing to make significant investments in IoT to digitize their assets. This creates a massive opportunity for Evreka to position itself as the software layer that integrates and analyzes data from these newly "smart" assets.`
+            },
+            'Focus Markets': {
+                title: 'Focus Markets Update (NL, UK, TR, IE)',
+                content: `<h5 class="font-semibold text-slate-700 mb-2">Detailed Analysis:</h5><ul class="list-disc pl-5 space-y-3 text-slate-600">
+                    <li><strong>United Kingdom:</strong> The Department for Environment, Food & Rural Affairs (Defra) has publicly reaffirmed its commitment to launching a mandatory digital waste tracking service, targeting a 2026/2027 rollout. This will legally require all waste movements to be recorded digitally.</li>
+                    <li><strong>Netherlands, Turkey, Ireland:</strong> No major, specific news items concerning waste management SaaS or major local players were identified in the monitored sources from the past 7 days.</li>
+                </ul>`,
+                takeaway: `The UK's move towards mandatory digital tracking is a huge opportunity. It transforms waste management software from an efficiency tool into a compliance necessity. Evreka has a significant first-mover advantage if it can develop and market a solution tailored to these upcoming UK regulations.`
+            },
+            'Broad Competitor Scan': {
+                title: 'Broad Competitor Scan (Full List)',
+                content: `<h5 class="font-semibold text-slate-700 mb-2">Detailed Analysis:</h5><ul class="list-disc pl-5 space-y-3 text-slate-600">
+                    <li><strong>Veolia:</strong> Announced the acquisition of IRSL, a UK-based company specializing in the operation and maintenance of Material Recovery Facilities (MRFs). This move deepens Veolia's capabilities in the recycling value chain.</li>
+                    <li><strong>All others:</strong> A high-level scan was conducted across the comprehensive list of over 150 competitors. No other major, market-moving announcements were identified this week.</li>
+                </ul>`,
+                takeaway: `Veolia's acquisition highlights the ongoing trend of vertical integration. As major players expand across the value chain (from collection to processing), the need for a single, unified software platform to manage these diverse operations becomes more critical. This is a key value proposition for Evreka to message.`
+            },
+        },
+        '2025-08-25': {
+            'Direct SaaS Competitors': {
+                title: 'Direct SaaS Competitors Update',
+                content: `<h5 class="font-semibold text-slate-700 mb-2">Detailed Analysis:</h5><ul class="list-disc pl-5 space-y-3 text-slate-600">
                     <li><strong>AMCS Group:</strong> Hosted multiple webinars this week (Aug 19 & 21) promoting their "Performance Sustainability" concept and the benefits of their Spring 2025 Release. This is an aggressive marketing push to own the market narrative that links sustainability directly to profitability.</li>
                     <li><strong>Routeware:</strong> Published a blog post on August 18 titled "What Roll-Off Businesses Gain from Dumpster Rental Software." This piece of content marketing clearly signals their focus on the roll-off and construction & demolition (C&D) niche.</li>
-                     <li><strong>Sensoneo, Rubicon, Compology, Waste Logics:</strong> No major announcements or news were released in the last 7 days.</li>
-                </ul>
-            `,
-            takeaway: `AMCS is actively trying to shape market perception, making it crucial for Evreka to counter with its own strong, data-backed value proposition. Routeware's focus on the roll-off niche presents an opportunity to create competitive marketing campaigns that highlight the advantages of Evreka's more comprehensive, end-to-end platform for these types of businesses.`
-        },
-        'Focus Markets': {
-            title: 'Focus Markets Update (NL, UK, TR, IE)',
-            content: `
-                <h5 class="font-semibold text-slate-700 mb-2">Detailed Analysis:</h5>
-                <ul class="list-disc pl-5 space-y-3 text-slate-600">
+                    <li><strong>Sensoneo, Rubicon, Compology, Waste Logics:</strong> No major announcements or news were released in the last 7 days.</li>
+                </ul>`,
+                takeaway: `AMCS is actively trying to shape market perception, making it crucial for Evreka to counter with its own strong, data-backed value proposition. Routeware's focus on the roll-off niche presents an opportunity to create competitive marketing campaigns that highlight the advantages of Evreka's more comprehensive, end-to-end platform for these types of businesses.`
+            },
+            'Focus Markets': {
+                title: 'Focus Markets Update (NL, UK, TR, IE)',
+                content: `<h5 class="font-semibold text-slate-700 mb-2">Detailed Analysis:</h5><ul class="list-disc pl-5 space-y-3 text-slate-600">
                     <li><strong>Turkey:</strong> The city of Istanbul has formalized a major collaboration with Jakarta, Indonesia, for knowledge-sharing on municipal waste management, including landfill operations, compost production, and carbon credits. This signals a strong commitment to modernizing waste infrastructure and adopting international best practices.</li>
                     <li><strong>Netherlands:</strong> A new report from Afvalgids.nl quantified the scale of the Dutch waste sector, noting over 1,700 companies operate at more than 3,200 locations. This provides a clear picture of the Total Addressable Market (TAM) in a key European region.</li>
                     <li><strong>United Kingdom & Ireland:</strong> No major, specific news items concerning waste management SaaS or major local players were identified in the monitored sources from the past 7 days.</li>
-                </ul>
-            `,
-            takeaway: `The Istanbul-Jakarta partnership highlights a growing global market for advanced waste management solutions and creates a potential entry point for Evreka into new regions as a technology partner in these modernization projects. The market data from the Netherlands provides valuable context for sales and marketing strategy in the Benelux region.`
-        },
-        'Broad Competitor Scan': {
-            title: 'Broad Competitor Scan (Full List)',
-            content: `<p class="text-slate-600"><strong>Activity:</strong> A high-level scan was conducted across the comprehensive list of over 150 competitors provided.</p>`,
-            takeaway: `No major, market-moving announcements (e.g., funding rounds, acquisitions, significant product launches) were identified for any companies on the broader watchlist this week. The majority of these companies are smaller, regional players or specialized hardware/software providers that do not generate weekly news. The primary competitive signals remain concentrated among the larger, direct SaaS competitors.`
-        },
-    };
-
-    // --- Chart Helpers ---
-    const chartColors = {
-        primary: 'rgba(3, 105, 161, 0.8)', // sky-700
-        primaryBg: 'rgba(3, 105, 161, 0.2)',
-        secondary: 'rgba(245, 158, 11, 0.8)', // amber-500
-        secondaryBg: 'rgba(245, 158, 11, 0.2)',
-        tertiary: 'rgba(100, 116, 139, 0.8)', // slate-500
-        tertiaryBg: 'rgba(100, 116, 139, 0.2)',
-        grid: 'rgba(226, 232, 240, 1)', // slate-200
-        text: '#1e293b' // slate-800
-    };
-
-    const defaultChartOptions = {
-        maintainAspectRatio: false,
-        responsive: true,
-        plugins: {
-            legend: { display: false },
-            tooltip: {
-                backgroundColor: 'rgba(0, 0, 0, 0.7)',
-                titleFont: { size: 14 },
-                bodyFont: { size: 12 },
-                padding: 10,
-                cornerRadius: 4,
-            }
-        },
-        scales: {
-            x: {
-                ticks: { color: chartColors.text, font: { size: 12 } },
-                grid: { color: chartColors.grid }
+                </ul>`,
+                takeaway: `The Istanbul-Jakarta partnership highlights a growing global market for advanced waste management solutions and creates a potential entry point for Evreka into new regions as a technology partner in these modernization projects. The market data from the Netherlands provides valuable context for sales and marketing strategy in the Benelux region.`
             },
-            y: {
-                ticks: { color: chartColors.text, font: { size: 12 } },
-                grid: { color: chartColors.grid }
-            }
+            'Broad Competitor Scan': {
+                title: 'Broad Competitor Scan (Full List)',
+                content: `<p class="text-slate-600">A high-level scan was conducted across the comprehensive list of over 150 competitors provided. No major, market-moving announcements were identified for any companies on the broader watchlist this week.</p>`,
+                takeaway: `The primary competitive signals remain concentrated among the larger, direct SaaS competitors. The broader market consists of smaller, regional, or specialized players who do not generate weekly news.`
+            },
+        },
+        '2025-08-18': {
+             'Direct SaaS Competitors': {
+                title: 'Direct SaaS Competitors Update',
+                content: `<h5 class="font-semibold text-slate-700 mb-2">Detailed Analysis:</h5><ul class="list-disc pl-5 space-y-3 text-slate-600">
+                    <li><strong>AMCS, Routeware, Compology, Rubicon, Waste Logics, Sensoneo:</strong> No major announcements or news were released in the last 7 days.</li>
+                </ul>`,
+                takeaway: `A quiet week from direct competitors provides an opportunity for proactive marketing and sales outreach. With the market's attention focused on regulatory changes, Evreka can lead the conversation about how its software provides the solution to these new compliance challenges.`
+            },
+             'Focus Markets': {
+                title: 'Focus Markets Update (NL, UK, TR, IE)',
+                content: `<h5 class="font-semibold text-slate-700 mb-2">Detailed Analysis:</h5><ul class="list-disc pl-5 space-y-3 text-slate-600">
+                    <li><strong>United Kingdom:</strong> The government has enacted two significant pieces of regulation. First, online marketplaces are now required to contribute to the cost of recycling waste electrical and electronic equipment (WEEE). Second, sellers of disposable vapes are now financially responsible for establishing and funding take-back and recycling schemes.</li>
+                    <li><strong>Netherlands:</strong> Government officials traveled to Geneva to participate in high-level negotiations for the UN Global Plastics Treaty, signaling a strong national commitment to finding a global solution to plastic pollution.</li>
+                    <li><strong>Turkey, Ireland:</strong> No major, specific news items were identified.</li>
+                </ul>`,
+                takeaway: `The UK is creating new, compliance-driven markets with these EPR regulations. The rules for WEEE and vapes create an immediate need for software that can manage producer responsibility, track financial contributions, and oversee logistics for take-back schemes. This is a greenfield opportunity for Evreka in a key focus market.`
+            },
+             'Broad Competitor Scan': {
+                title: 'Broad Competitor Scan (Full List)',
+                content: `<h5 class="font-semibold text-slate-700 mb-2">Detailed Analysis:</h5><p class="text-slate-600">No major, market-moving announcements were identified for any companies on the broader watchlist this week.</p>`,
+                takeaway: `The primary market drivers this week are regulatory, not competitive. The focus should be on how to position Evreka as the solution to the new challenges and opportunities being created by governments, particularly in the UK.`
+            },
+        },
+        '2025-08-11': {
+            'Direct SaaS Competitors': {
+                title: 'Direct SaaS Competitors Update',
+                content: `<h5 class="font-semibold text-slate-700 mb-2">Detailed Analysis:</h5><ul class="list-disc pl-5 space-y-3 text-slate-600">
+                    <li><strong>Routeware:</strong> No major product announcements, but their blog continues to focus on content for specific industry verticals, indicating a targeted marketing strategy.</li>
+                    <li><strong>AMCS, Compology, Rubicon, Waste Logics, Sensoneo:</strong> No major announcements or news were released in the last 7 days.</li>
+                </ul>`,
+                takeaway: `The continued quiet from major competitors provides a window to be proactive. The market is clearly moving towards AI and automation, and Evreka can leverage the news from GFL and BHS to start conversations with clients about how its software platform is essential to maximize the ROI of these new hardware investments.`
+            },
+            'Focus Markets': {
+                title: 'Focus Markets Update (NL, UK, TR, IE)',
+                content: `<h5 class="font-semibold text-slate-700 mb-2">Detailed Analysis:</h5><ul class="list-disc pl-5 space-y-3 text-slate-600">
+                    <li><strong>Netherlands:</strong> A court ruling sentenced an exporter for illegally shipping plastic waste, highlighting the increasing legal scrutiny and enforcement against waste fraud. This increases the value of software that provides transparent and auditable waste tracking.</li>
+                    <li><strong>Turkey, United Kingdom, Ireland:</strong> No major, specific news items were identified.</li>
+                </ul>`,
+                takeaway: `The Dutch court case reinforces the need for robust chain-of-custody tracking. This is a key selling point for Evreka's platform, which can provide the digital audit trail necessary for companies to prove compliance and avoid significant legal and financial penalties.`
+            },
+            'Broad Competitor Scan': {
+                title: 'Broad Competitor Scan (Full List)',
+                content: `<h5 class="font-semibold text-slate-700 mb-2">Detailed Analysis:</h5><ul class="list-disc pl-5 space-y-3 text-slate-600">
+                    <li><strong>GFL Environmental:</strong> Is deploying AI-powered cameras from Prairie Robotics in its collection trucks to monitor and reduce contamination in residential recycling bins.</li>
+                    <li><strong>Bulk Handling Systems (BHS):</strong> Has been awarded a contract to design and install a large-scale, 100-ton-per-hour automated MRF in California.</li>
+                    <li><strong>CP Group:</strong> A leading manufacturer of MRF sorting systems, received a majority investment from a private equity firm to accelerate its growth and R&D.</li>
+                </ul>`,
+                takeaway: `The entire waste value chain is rapidly investing in automation and AI. GFL's move shows that data collection is happening at the source (the truck), while the BHS and CP Group news proves that processing is becoming highly automated. This creates a massive opportunity for a software platform like Evreka to act as the central nervous system, connecting the data from collection all the way through to the automated sorting process.`
+            },
+        },
+        '2025-08-04': {
+            'Direct SaaS Competitors': {
+                title: 'Direct SaaS Competitors Update',
+                content: `<h5 class="font-semibold text-slate-700 mb-2">Detailed Analysis:</h5><ul class="list-disc pl-5 space-y-3 text-slate-600">
+                    <li><strong>Routeware:</strong> Published a new blog post targeting municipalities, indicating a continued focus on the public sector market segment.</li>
+                    <li><strong>AMCS, Compology, Rubicon, Waste Logics, Sensoneo:</strong> No major announcements.</li>
+                </ul>`,
+                takeaway: `The lack of major news from direct competitors, combined with the significant developments in specialized recycling, highlights an opportunity for Evreka to establish itself as a thought leader in these high-value niches. By tailoring marketing content and product features to the unique needs of battery, medical, and electronics recycling, Evreka can capture market share in these rapidly growing segments.`
+            },
+            'Focus Markets': {
+                title: 'Focus Markets Update (NL, UK, TR, IE)',
+                content: `<h5 class="font-semibold text-slate-700 mb-2">Detailed Analysis:</h5><ul class="list-disc pl-5 space-y-3 text-slate-600">
+                    <li><strong>United Kingdom:</strong> GKN Aerospace is leading a £50 million project to develop a liquid hydrogen propulsion system, which includes a focus on creating a circular supply chain for the materials used. This highlights the extension of circular economy principles into advanced manufacturing.</li>
+                    <li><strong>Netherlands, Turkey, Ireland:</strong> No major, specific news items were identified.</li>
+                </ul>`,
+                takeaway: `The GKN project in the UK is a strong signal that circular economy principles are moving beyond traditional waste streams and into complex, industrial supply chains. This creates a future market for software that can track and manage the lifecycle of high-value, specialized materials in sectors like aerospace and manufacturing.`
+            },
+            'Broad Competitor Scan': {
+                title: 'Broad Competitor Scan (Full List)',
+                content: `<h5 class="font-semibold text-slate-700 mb-2">Detailed Analysis:</h5><ul class="list-disc pl-5 space-y-3 text-slate-600">
+                    <li><strong>Cirba Solutions:</strong> Opened the first commercial-scale plant in the US for producing battery-grade materials from black mass, a key step in creating a circular supply chain for EV batteries.</li>
+                    <li><strong>Brightmark:</strong> Announced that its partnership with Lewis Salvage has successfully recycled over 1 million pounds of medical plastics, proving a viable model for this complex waste stream.</li>
+                </ul>`,
+                takeaway: `The growth in specialized recycling for batteries and medical plastics creates a direct need for specialized software. These processes require meticulous tracking of inbound materials, managing complex processing workflows, and providing detailed compliance reporting. Evreka can target these high-value niches with a tailored software offering that addresses their unique operational challenges.`
+            },
+        },
+        '2025-07-28': {
+             'Direct SaaS Competitors': {
+                title: 'Direct SaaS Competitors Update',
+                content: `<h5 class="font-semibold text-slate-700 mb-2">Detailed Analysis:</h5><ul class="list-disc pl-5 space-y-3 text-slate-600">
+                    <li><strong>Routeware:</strong> Announced its Summer 2025 product release, featuring enhancements to its billing, customer service (CRM), and route optimization modules.</li>
+                    <li><strong>AMCS, Compology, Rubicon, Waste Logics, Sensoneo:</strong> No major announcements.</li>
+                </ul>`,
+                takeaway: `Routeware's focus on core operational features indicates that the battle for efficiency in collections and billing is still a key competitive front. Evreka should ensure its own core offerings in these areas are best-in-class, while also differentiating with its broader platform capabilities in sustainability and circular economy.`
+            },
+            'Focus Markets': {
+                title: 'Focus Markets Update (NL, UK, TR, IE)',
+                content: `<h5 class="font-semibold text-slate-700 mb-2">Detailed Analysis:</h5><ul class="list-disc pl-5 space-y-3 text-slate-600">
+                    <li><strong>United Kingdom:</strong> A new report highlighted the growing problem of "fast tech" - low-cost, quickly discarded electronics - as a major contributor to the e-waste stream. This puts a spotlight on the need for better e-waste tracking and recycling solutions.</li>
+                    <li><strong>Netherlands, Turkey, Ireland:</strong> No major, specific news items were identified.</li>
+                </ul>`,
+                takeaway: `The focus on "fast tech" in the UK creates an opportunity to market Evreka's solutions for e-waste management. As regulatory and consumer pressure grows, companies handling these materials will need sophisticated software to manage collection, data wiping, and compliant recycling processes.`
+            },
+             'Broad Competitor Scan': {
+                title: 'Broad Competitor Scan (Full List)',
+                content: `<h5 class="font-semibold text-slate-700 mb-2">Detailed Analysis:</h5><ul class="list-disc pl-5 space-y-3 text-slate-600">
+                    <li><strong>Casella Waste Systems:</strong> Has been highly active in M&A, spending $165 million on eight acquisitions in 2025, with plans for more.</li>
+                    <li><strong>GFL Environmental:</strong> Sold its operations in Colorado and New Mexico to the new entity Peak Waste Solutions for $110 million.</li>
+                </ul>`,
+                takeaway: `Aggressive consolidation by players like Casella creates significant opportunities. Each acquisition triggers a potential software system review. Sales and marketing should actively target these newly acquired companies, as they are often required to standardize on the parent company's platform. The GFL divestiture creates an immediate, high-value opportunity to engage with Peak Waste Solutions as they establish their new, independent technology stack.`
+            },
         }
     };
-    
-    // --- Chart Rendering ---
-    
-    // 1. Funding Chart
-    const fundingCtx = document.getElementById('fundingChart').getContext('2d');
-    new Chart(fundingCtx, {
-        type: 'bar',
-        data: {
-            labels: ['Resynergi (Adv. Recycling)', 'MagREEsource (Critical Materials)', 'Afresh (Waste Reduction)'],
-            datasets: [{
-                label: 'Funding (€)',
-                data: [6000000, 23000000, 107500000],
-                backgroundColor: [chartColors.tertiaryBg, chartColors.primaryBg, chartColors.secondaryBg],
-                borderColor: [chartColors.tertiary, chartColors.primary, chartColors.secondary],
-                borderWidth: 1
-            }]
-        },
-        options: {
-           ...defaultChartOptions,
-            indexAxis: 'y',
-            scales: {
-                 x: {
-                    type: 'logarithmic',
-                    ticks: {
-                        color: chartColors.text,
-                        callback: function(value, index, values) {
-                            if (value === 100000000) return '€100M';
-                            if (value === 10000000) return '€10M';
-                            if (value === 1000000) return '€1M';
-                            return null;
-                        }
-                    },
-                    grid: { color: chartColors.grid }
-                },
-                y: {
-                    ticks: { color: chartColors.text, font: { size: 12 } },
-                    grid: { display: false }
-                }
-            },
-            plugins: {
-               ...defaultChartOptions.plugins,
-                tooltip: {
-                   ...defaultChartOptions.plugins.tooltip,
-                    callbacks: {
-                        label: function(context) {
-                            let label = context.dataset.label || '';
-                            if (label) {
-                                label += ': ';
-                            }
-                            if (context.parsed.x !== null) {
-                                label += new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', notation: 'compact' }).format(context.parsed.x);
-                            }
-                            return label;
-                        }
-                    }
-                }
+
+    // --- Briefing Selection Logic ---
+    const briefingSelector = document.getElementById('briefing-selector');
+    const briefings = document.querySelectorAll('main');
+
+    function showBriefing(weekId) {
+        briefings.forEach(briefing => {
+            if (briefing.id === `briefing-${weekId}`) {
+                briefing.classList.remove('hidden');
+            } else {
+                briefing.classList.add('hidden');
             }
-        }
+        });
+        setupCompetitorTabs(weekId);
+    }
+
+    briefingSelector.addEventListener('change', (e) => {
+        showBriefing(e.target.value);
     });
     
-    // --- Interactivity Logic ---
+    // --- Competitor Tabs Logic ---
+    function setupCompetitorTabs(weekId) {
+        const competitorTabsContainer = document.getElementById(`competitor-tabs-${weekId}`);
+        if (!competitorTabsContainer) return;
+        
+        competitorTabsContainer.innerHTML = '';
+        const weekData = competitorData[weekId];
+        if (!weekData) return;
 
-    // Competitor Tabs
-    const competitorTabsContainer = document.getElementById('competitor-tabs');
-    const competitorContentContainer = document.getElementById('competitor-content');
-    const competitorOrder = ['Direct SaaS Competitors', 'Focus Markets', 'Broad Competitor Scan'];
+        const competitorOrder = ['Direct SaaS Competitors', 'Focus Markets', 'Broad Competitor Scan'];
 
+        competitorOrder.forEach((name, index) => {
+            const button = document.createElement('button');
+            button.className = 'tab-button px-4 py-2 text-sm font-semibold rounded-md transition-colors duration-200 bg-white text-slate-600 hover:bg-slate-100 shadow-sm border border-slate-200';
+            button.textContent = name;
+            button.dataset.competitor = name;
+            competitorTabsContainer.appendChild(button);
 
-    competitorOrder.forEach((name, index) => {
-        const button = document.createElement('button');
-        button.className = 'tab-button px-4 py-2 text-sm font-semibold rounded-md transition-colors duration-200 bg-white text-slate-600 hover:bg-slate-100 shadow-sm border border-slate-200';
-        button.textContent = name;
-        button.dataset.competitor = name;
-        competitorTabsContainer.appendChild(button);
-
-        if (index === 0) {
-            button.classList.add('active');
-            renderCompetitorContent(name);
-        }
-    });
-
-    competitorTabsContainer.addEventListener('click', (e) => {
-        if (e.target.matches('button')) {
-            const competitorName = e.target.dataset.competitor;
-            const currentActive = competitorTabsContainer.querySelector('.active');
-            if (currentActive) {
-                currentActive.classList.remove('active');
+            if (index === 0) {
+                button.classList.add('active');
+                renderCompetitorContent(weekId, name);
             }
-            e.target.classList.add('active');
-            renderCompetitorContent(competitorName);
-        }
-    });
+        });
 
-    function renderCompetitorContent(name) {
-        const data = competitorData[name];
+        competitorTabsContainer.addEventListener('click', (e) => {
+            if (e.target.matches('button')) {
+                const competitorName = e.target.dataset.competitor;
+                const currentActive = competitorTabsContainer.querySelector('.active');
+                if (currentActive) {
+                    currentActive.classList.remove('active');
+                }
+                e.target.classList.add('active');
+                renderCompetitorContent(weekId, competitorName);
+            }
+        });
+    }
+
+    function renderCompetitorContent(weekId, name) {
+        const data = competitorData[weekId]?.[name];
+        const competitorContentContainer = document.getElementById(`competitor-content-${weekId}`);
+        if (!competitorContentContainer || !data) {
+             if(competitorContentContainer) competitorContentContainer.innerHTML = '<p>Data not available for this week.</p>';
+             return;
+        }
+        
         competitorContentContainer.innerHTML = `
             <h3 class="text-xl font-bold text-slate-800 mb-4">${data.title}</h3>
             <div class="prose prose-slate max-w-none">${data.content}</div>
@@ -449,48 +1184,12 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
     }
 
-    // Market Drivers Tabs
-    const marketTabsContainer = document.getElementById('market-tabs');
-    marketTabsContainer.addEventListener('click', (e) => {
-        if (e.target.matches('button') && !e.target.classList.contains('active')) {
-            const tabName = e.target.dataset.tab;
-            const currentActiveButton = marketTabsContainer.querySelector('.active');
-            
-            if (currentActiveButton) {
-                currentActiveButton.classList.remove('active');
-                currentActiveButton.classList.add('border-transparent', 'text-slate-500');
-            }
-
-            e.target.classList.add('active');
-            e.target.classList.remove('border-transparent', 'text-slate-500');
-
-            document.querySelectorAll('.market-content-pane').forEach(pane => pane.classList.add('hidden'));
-            document.getElementById(`${tabName}-content`).classList.remove('hidden');
-        }
-    });
-
-    // Nav Link Active State on Scroll
-    const sections = document.querySelectorAll('section');
-    const navLinks = document.querySelectorAll('.nav-link');
-    
-    window.addEventListener('scroll', () => {
-        let current = '';
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            if (pageYOffset >= sectionTop - 80) {
-                current = section.getAttribute('id');
-            }
-        });
-
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('href').substring(1) === current) {
-                link.classList.add('active');
-            }
-        });
-    });
+    // Initial Load
+    const initialWeekId = briefingSelector.value;
+    showBriefing(initialWeekId);
 
 });
 </script>
 </body>
 </html>
+
